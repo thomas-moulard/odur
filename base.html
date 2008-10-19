@@ -2,35 +2,134 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <link rel="stylesheet" href="stylesheet/style.css" />
-    <title>Udor :: {% block title %}Main page{% endblock %}</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="stylesheet/style.css" />
+  <link rel="stylesheet" href="stylesheet/google.css" />
+  <!--[if IE]><link rel="stylesheet" type="text/css" href="/css/iehacks.css" /><![endif]-->
+  <link rel="stylesheet" href="stylesheet/semantic_headers.css" />
+  <title>Odur :: {% block title %}Main page{% endblock %}</title>
 </head>
 
-<body>
-    <div id="sidebar">
-        {% block sidebar %}
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/bank">Bank list</a></li>
-        </ul>
-        {% endblock %}
-    </div>
+<body class="odur">
 
-    {% block user %}
-    <div id="user">
-    {% if currentUser %}
-      <span name="userNickname">{{currentUser.nickname}}</span>
-      <span name="userEmail">{{currentUser.email}}</span>
-      <span name="logout"><a href="{{logoutUrl}}">logout</a></span>
+<div id="odur-container">
+
+{% block header %}
+<a name="top"></a>
+<div id="skipto">
+  <a href="#odur-pagecontent-anchor">Skip to page content</a>
+  <a href="#odur-toc-anchor">Skip to main navigation</a>
+</div>
+<div id="langpref">
+  <a class="dropdown" href="/">English</a>
+  <span>|</span>
+  <a href="FIXME">FIXME</a>
+</div>
+
+<div id="odur-header">
+  <div id="logo"><a href="/">
+     <img src="/image/blank.png"
+	  height="1px" width="1px" alt="Odur" id="odur-logo-img"/>
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm" style="display:none">
+      <form action="" accept-charset="utf-8">
+        <table class="odur-search-box" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td class="odur-input">
+                <input id="gsearchInput" type="text"
+		       name="q" maxlength="2048" class="odur-input"
+		       autocomplete="off" title="Google Code Search"
+		       style="width:345px"/>
+              </td>
+              <td class="odur-search-button">
+                <div id='odur-searchresults'
+		     onclick='event.cancelBubble = true;'></div>
+                <input title="Search" id="gsearchButton"
+		       class="odur-search-button" value="Search"
+		       type="submit"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="greytext">e.g. TODO EXAMPLE</td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div> <!-- end searchForm -->
+    <div id="searchForm2" class="searchForm2" style="display:block">
+      <form id="cse" action="http://www.google.com/cse">
+        <input type="text" name="q" maxlength="2048"
+	       autocomplete="off" title="Google Code Search"
+	       style="width:345px"/>
+        <input type="submit" name="sa" value="Search" title="Search"/><br/>
+        <div class="greytext">e.g. TODO EXAMPLE</div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+
+{% block topnav %}
+<a name="odur-topnav-anchor"></a>
+<div id="odur-topnav">
+  <h1>Odur</h1>
+  <ul id="navigation" class="odur-topnav-tabs">
+    <li id="home_link">
+      <a href="/" title="Odur home page">Home</a>
+    </li>
+    <li id="account_link">
+      <a href="/account" title="Bank list">Accounts</a>
+    </li>
+    <li id="bank_link">
+      <a href="/bank" title="Bank list">Banks</a>
+    </li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="odur-section odur-tpl-170">
+  <a name="odur-toc-anchor"></a>
+  <div class="odur-unit odur-first" id="odur-toc">
+
+    {% block userSidebar %}
+    <div id="userSidebar">
+      {% if currentUser %}
+      <span class="userEmail">{{currentUser.email}}</span><br/>
+      <span class="logout"><a href="{{logoutUrl}}">sign out</a></span>
     {% else %}
-    <span name="login"><a href="{{loginUrl}}">login</a></span>
+    <span class="login"><a href="{{loginUrl}}">sign in</a></span>
     {% endif %}
     </div>
+    <div class="line"></div>
     {% endblock %}
 
+    <ul>
+      <li><a href="/account">Accounts</a></li>
+      <li><a href="/bank">Banks</a></li>
+    </ul>
+</div>
+{% endblock %}
 
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
+
+<a name="odur-pagecontent-anchor"></a>
+<div class="odur-unit" id="odur-pagecontent">
+  <!-- <h1 class="page_title">FIXME</h1> //-->
+  {% block content %}{% endblock %}
+</div>
+
+{% block footer %}
+<div id="odur-footer" dir="ltr">
+  <div class="text">
+    &copy;2008 Thomas Moulard
+  </div>
+</div><!-- end odur-footer -->
+{% endblock %}
+
+</div><!-- end odur-containter -->
 </body>
 </html>

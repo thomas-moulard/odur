@@ -87,10 +87,10 @@ class AccountPage(webapp.RequestHandler):
   def handleActions(self):
     if self.request.get('action') == 'delete':
       self.delete()
-      self.redirect('/')
+      self.redirect('/account')
     if self.request.get('action') == 'add':
       self.add()
-      self.redirect('/')
+      self.redirect('/account')
 
   def get(self):
     self.handleActions()
@@ -229,9 +229,20 @@ class OperationPage(webapp.RequestHandler):
   def post(self):
     self.handleActions()
 
+class MainPage(webapp.RequestHandler):
+  def get(self):
+    template_values = {
+      'currentUser': users.get_current_user(),
+      'loginUrl': users.create_login_url("/"),
+      'logoutUrl': users.create_logout_url("/"),
+      }
+    path = os.path.join(os.path.dirname(__file__), 'main.html')
+    self.response.out.write(template.render(path, template_values))
+
 
 def main():
-  application = webapp.WSGIApplication([('/', AccountPage),
+  application = webapp.WSGIApplication([('/', MainPage),
+                                        ('/account', AccountPage),
                                         ('/bank', BankPage),
                                         ('/operation', OperationPage)],
                                        debug=True)
