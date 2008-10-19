@@ -6,22 +6,27 @@
     <table id="accountList">
       <caption>Bank account list</caption>
       <tr>
+	<th style="width:1%">&nbsp;</th>
 	<th>Name</th>
 	<th>Bank name</th>
 	<th>Creation date</th>
 	<th>Last update</th>
 	<th>Owner</th>
-	<th>Action</th>
+	<th style="width:1%">Action</th>
       </tr>
 {% for account in accounts %}
       <tr class="{% cycle rowEven,rowOdd %}">
-	<td>{{account.name}}</td>
+	<td><input type="checkbox" name="account[]"
+		   id="account_{{account.key}}"
+		   value="{{account.key}}"/></td>
+	<td>
+	  <a href="/operation?account={{account.key}}">{{account.name}}</a>
+	</td>
 	<td>{{account.bank.name}}</td>
 	<td>{{account.dateCreation}}</td>
 	<td>{{account.dateOwner}}</td>
 	<td>{{account.owner}}</td>
 	<td>
-	  <a href="/operation?account={{account.key}}">view</a> |
 	  <a href="?action=delete&key={{account.key}}">delete</a>
 	</td>
       </tr>

@@ -5,9 +5,18 @@
 {% block content %}
     <table id="bankList">
       <caption>Bank list</caption>
-{% for bank in banks %}
+      <caption>Bank account list</caption>
       <tr>
-	<td>{{bank.name}}</td>
+	<th style="width:1%">&nbsp;</th>
+	<th>Bank name</th>
+	<th style="width:1%">Action</th>
+      </tr>
+{% for bank in banks %}
+      <tr class="{% cycle rowEven,rowOdd %}">
+	<td><input type="checkbox" name="bank[]"
+		   id="bank_{{bank.key}}"
+		   value="{{bank.key}}"/></td>
+	<td><label for="bank_{{bank.key}}">{{bank.name}}</label></td>
 	<td><a href="?action=delete&key={{bank.key}}">delete</a></td>
       </tr>
 {% endfor %}

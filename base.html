@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <link rel="stylesheet" href="stylesheet/style.css" />
   <link rel="stylesheet" href="stylesheet/google.css" />
+  <link rel="stylesheet" href="stylesheet/style.css" />
   <!--[if IE]><link rel="stylesheet" type="text/css" href="/css/iehacks.css" /><![endif]-->
   <link rel="stylesheet" href="stylesheet/semantic_headers.css" />
   <title>Odur :: {% block title %}Main page{% endblock %}</title>
@@ -109,7 +109,14 @@
     {% endblock %}
 
     <ul>
-      <li><a href="/account">Accounts</a></li>
+      <li>
+	<a href="/account">Accounts</a>
+	<ul>
+{% for account in accounts %}
+	<li><a href="/account?account={{account.key}}">{{account.name}}</a></li>
+{% endfor %}
+      </ul>
+      </li>
       <li><a href="/bank">Banks</a></li>
     </ul>
 </div>

@@ -1,3 +1,39 @@
+table {
+    caption-side: top;
+}
+
+caption {
+    margin-top: 1em;
+    font-weight: bold;
+    font-size:125%;
+}
+
+form label {
+    font-weight: bold;
+    margin-right: 0.3em;
+}
+form label:after {
+    content: ':';
+}
+
 .userEmail { font-weight: bold; }
 .login {}
 .logout {}
+
+.rowEven td { background-color: #fff; }
+.rowOdd td { background-color: #eee; }
+
+.red { color:red }
+
+#operationList, #bankList, #accountList {
+ width: 90%
+}
+
+#operationList tfoot {
+    font-weight: bold;
+}
+
+#operationList tfoot tr {
+    border-top: 2px solid #36C;
+    font-weight: bold;
+}

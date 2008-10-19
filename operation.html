@@ -1,25 +1,34 @@
 {% extends "base.html" %}
 
-{% block title %}View operations for account ``{{account.name}}'' {% endblock %}
+{% block title %}View operations for currentAccount ``{{currentAccount.name}}'' {% endblock %}
 
 {% block content %}
     <table id="operationList">
       <caption>Operation list</caption>
       <tr>
-	<th>Description</th>
-	<th>Amount</th>
+	<th style="width:1%">&nbsp;</th>
+	<th style="width:88%">Description</th>
+	<th style="width:10%">Amount</th>
+	<th style="width:1%">Action</th>
       </tr>
 {% for operation in operations %}
       <tr class="{% cycle rowEven,rowOdd %}">
-	<td>{{operation.description}}</td>
-	<td>{{operation.amount}}</td>
-	<td><a href="?action=delete&account={{account.key}}&key={{operation.key}}">delete</a></td>
+	<td><input type="checkbox" name="operation[]"
+		   id="operation_{{operation.key}}"
+		   value="{{operation.key}}"/></td>
+	<td>
+	  <label for="operation_{{operation.key}}">{{operation.description}}
+	  </label>
+	</td>
+	<td>{{operation.amount|floatformat}}</td>
+	<td><a href="?action=delete&currentAccount={{currentAccount.key}}&key={{operation.key}}">delete</a></td>
       </tr>
 {% endfor %}
       <tfoot>
 	<tr>
-	  <td>Amount:</td>
-	  <td colspan="2">{{currentAmount}}</td>
+	  <td colspan="2">Amount:</td>
+	  <td class="{% firstof amountPositive "red" %}">{{currentAmount}}</td>
+	  <td>&nbsp;</td>
 	</tr>
       </tfoot>
     </table>
@@ -34,7 +43,8 @@
 	<input type="text" name="amount" id="amount"></input>
       </div>
       <div><input type="submit" value="Add operation"></div>
-      <input type="hidden" name="account" value="{{account.key}}"/>
+      <input type="hidden" name="currentAccount"
+	     value="{{currentAccount.key}}"/>
       <input type="hidden" name="action" value="add"/>
     </form>
 {% endblock %}

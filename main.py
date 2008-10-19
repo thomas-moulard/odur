@@ -25,6 +25,18 @@ from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+def addCommonTemplateValues(template_values):
+  template_values['currentUser'] = users.get_current_user()
+  template_values['loginUrl'] = users.create_login_url("/"),
+  template_values['logoutUrl'] = users.create_logout_url("/")
+  if users.get_current_user() == None:
+    accounts = None
+  else:
+    accounts_query = Account.all()
+    accounts_query.filter('owner =', users.get_current_user()).order('name')
+    accounts = accounts_query.fetch(10)
+  template_values['accounts'] = accounts
+
 class DecimalProperty(db.Property):
   data_type = Decimal
 
@@ -107,12 +119,9 @@ class AccountPage(webapp.RequestHandler):
 
 
     template_values = {
-      'accounts': accounts,
       'banks': banks,
-      'currentUser': users.get_current_user(),
-      'loginUrl': users.create_login_url("/"),
-      'logoutUrl': users.create_logout_url("/"),
       }
+    addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'account.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -153,10 +162,8 @@ class BankPage(webapp.RequestHandler):
 
     template_values = {
       'banks': banks,
-      'currentUser': users.get_current_user(),
-      'loginUrl': users.create_login_url("/"),
-      'logoutUrl': users.create_logout_url("/"),
       }
+    addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'bank.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -216,13 +223,12 @@ class OperationPage(webapp.RequestHandler):
       currentAmount += Decimal(op.amount)
 
     template_values = {
-      'account': account,
       'operations': operations,
+      'currentAccount': account,
+      'amountPositive': currentAmount >= 0,
       'currentAmount': currentAmount,
-      'currentUser': users.get_current_user(),
-      'loginUrl': users.create_login_url("/"),
-      'logoutUrl': users.create_logout_url("/"),
       }
+    addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'operation.html')
     self.response.out.write(template.render(path, template_values))
 
