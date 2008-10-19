@@ -16,6 +16,7 @@
 #
 
 import os
+from datetime import datetime
 
 from decimal import *
 
@@ -194,6 +195,8 @@ class OperationPage(webapp.RequestHandler):
     if users.get_current_user() == None:
       return
     operation = Operation(
+      number = self.request.get('number'),
+      date = datetime.now(), #FIXME
       description = self.request.get('description'),
       account = db.get(self.request.get('account')),
       amount = self.request.get('amount')

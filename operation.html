@@ -8,8 +8,8 @@
       <tr>
 	<th style="width:1%">&nbsp;</th>
 	<th style="width:10%">N°</th>
-	<th style="width:10%">Date</th>
-	<th style="width:57%">Description</th>
+	<th style="width:25%">Date</th>
+	<th style="width:42%">Description</th>
 	<th style="width:1%">P</th>
 	<th style="width:10%">Debit</th>
 	<th style="width:10%">Credit</th>
@@ -21,14 +21,14 @@
 		   id="operation_{{operation.key}}"
 		   value="{{operation.key}}"/></td>
 	<td>
-{% if operation.p %}{{operation.number}}{% else %}-{% endif %}
+{% if operation.number %}{{operation.number}}{% else %}-{% endif %}
 	</td>
-	<td>{{operation.date}}</td>
+	<td>{{operation.date|date:"Y l F jS f a"}}</td>
 	<td style="font-style:italic">
 	  <label for="operation_{{operation.key}}">{{operation.description}}
 	  </label>
 	</td>
-	<td>{% if operation.p %}Yes{% else %}No{% endif %}</td>
+	<td>{{operation.p|yesno}}</td>
 	<td>{{operation.debit|floatformat}}</td>
 	<td>{{operation.credit|floatformat}}</td>
 	<td><a href="?action=delete&account={{currentAccount.key}}&key={{operation.key}}">delete</a></td>
@@ -36,25 +36,35 @@
 {% endfor %}
       <tfoot>
 	<tr>
-	  <td colspan="2">Total debit / credit:</td>
-	  <td colspan="3">&nbsp;</td>
+	  <td colspan="5">Total:</td>
 	  <td>{{currentDebit}}</td>
 	  <td>{{currentCredit}}</td>
-	  <td>&nbsp;</td>
-	</tr>
-	<tr>
-	  <td colspan="2">Total amount:</td>
-	  <td colspan="5"
-	      class="{% firstof amountPositive "red" %}"
+	  <td class="{% firstof amountPositive "red" %}"
 	      style="text-align:right">
 	    {{currentAmount}}
 	  </td>
-	  <td>&nbsp;</td>
 	</tr>
       </tfoot>
     </table>
 
     <form action="" method="post" name="addOperation">
+      <div>
+	<label for="number">Number</label>
+	<input type="text" id="number" name="number"></input>
+      </div>
+      <div>
+	<label for="datey">Date (empty for now)</label>
+	<input type="text" id="datey" name="date_year"
+	       size="4" maxlength="4"></input>
+	<input type="text" id="datem" name="date_month"
+	       size="2" maxlength="2"></input>
+	<input type="text" id="dated" name="date_day"
+	       size="2" maxlength="2"></input>
+	<input type="text" id="dateh" name="date_hour"
+	       size="2" maxlength="2"></input>
+	<input type="text" id="datem" name="date_minute"
+	       size="2" maxlength="2"></input>
+      </div>
       <div>
 	<label for="description">Description</label>
 	<input type="text" id="description" name="description"></input>

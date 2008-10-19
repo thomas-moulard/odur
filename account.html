@@ -24,8 +24,8 @@
 	  <a href="/operation?account={{account.key}}">{{account.name}}</a>
 	</td>
 	<td>{{account.bank.name}}</td>
-	<td>{{account.dateCreation}}</td>
-	<td>{{account.dateOwner}}</td>
+	<td>{{account.dateCreation|date:"Y l F jS"}}</td>
+	<td>{{account.dateOwner|date:"Y l F jS"}}</td>
 	<td>{{account.owner}}</td>
 	<td class="{% firstof account.amountPositive "red" %}">
 	{{account.amount}}</td>
