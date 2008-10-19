@@ -27,8 +27,8 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 def addCommonTemplateValues(template_values):
   template_values['currentUser'] = users.get_current_user()
-  template_values['loginUrl'] = users.create_login_url("/"),
-  template_values['logoutUrl'] = users.create_logout_url("/")
+  template_values['loginUrl'] = users.create_login_url('/')
+  template_values['logoutUrl'] = users.create_logout_url('/')
   if users.get_current_user() == None:
     accounts = None
   else:
