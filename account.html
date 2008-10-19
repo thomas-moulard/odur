@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}View accounts{% endblock %}
+
+{% block content %}
+    <table id="accountList">
+      <caption>Bank account list</caption>
+      <tr>
+	<th>Name</th>
+	<th>Bank name</th>
+	<th>Creation date</th>
+	<th>Last update</th>
+	<th>Owner</th>
+	<th>Action</th>
+      </tr>
+{% for account in accounts %}
+      <tr class="{% cycle rowEven,rowOdd %}">
+	<td>{{account.name}}</td>
+	<td>{{account.bank.name}}</td>
+	<td>{{account.dateCreation}}</td>
+	<td>{{account.dateOwner}}</td>
+	<td>{{account.owner}}</td>
+	<td>
+	  <a href="/operation?account={{account.key}}">view</a> |
+	  <a href="?action=delete&key={{account.key}}">delete</a>
+	</td>
+      </tr>
+{% endfor %}
+    </table>
+
+    <form action="" method="post" name="addAccount">
+      <div>
+	<label for="account">Account name</label>
+	<input type="text" id="account" name="account"></input>
+      </div>
+      <div>
+	<label for="bank">Bank name</label>
+	<select name="bank" id="bank">
+{% for bank in banks %}
+		<option id="bank_{{bank.key}}"
+			value="{{bank.key}}">{{bank.name}}</option>
+{% endfor %}
+        </select>
+      </div>
+      <div><input type="submit" value="Add account"></div>
+      <input type="hidden" name="action" value="add"/>
+    </form>
+{% endblock %}

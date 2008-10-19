@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}View operations for account ``{{account.name}}'' {% endblock %}
+
+{% block content %}
+    <table id="operationList">
+      <caption>Operation list</caption>
+      <tr>
+	<th>Description</th>
+	<th>Amount</th>
+      </tr>
+{% for operation in operations %}
+      <tr class="{% cycle rowEven,rowOdd %}">
+	<td>{{operation.description}}</td>
+	<td>{{operation.amount}}</td>
+	<td><a href="?action=delete&account={{account.key}}&key={{operation.key}}">delete</a></td>
+      </tr>
+{% endfor %}
+      <tfoot>
+	<tr>
+	  <td>Amount:</td>
+	  <td colspan="2">{{currentAmount}}</td>
+	</tr>
+      </tfoot>
+    </table>
+
+    <form action="" method="post" name="addOperation">
+      <div>
+	<label for="description">Description</label>
+	<input type="text" id="description" name="description"></input>
+      </div>
+      <div>
+	<label for="amount">Amount</label>
+	<input type="text" name="amount" id="amount"></input>
+      </div>
+      <div><input type="submit" value="Add operation"></div>
+      <input type="hidden" name="account" value="{{account.key}}"/>
+      <input type="hidden" name="action" value="add"/>
+    </form>
+{% endblock %}

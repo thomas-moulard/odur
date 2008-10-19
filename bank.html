@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}View banks{% endblock %}
+
+{% block content %}
+    <table id="bankList">
+      <caption>Bank list</caption>
+{% for bank in banks %}
+      <tr>
+	<td>{{bank.name}}</td>
+	<td><a href="?action=delete&key={{bank.key}}">delete</a></td>
+      </tr>
+{% endfor %}
+    </table>
+
+    <form action="" method="post" name="addBank">
+      <div>
+	<label for="name">Bank name</label>
+	<input type="text" id="name" name="name"></input>
+      </div>
+      <div><input type="submit" value="Add bank"></div>
+      <input type="hidden" name="action" value="add"/>
+    </form>
+{% endblock %}

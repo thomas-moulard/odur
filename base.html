@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <link rel="stylesheet" href="stylesheet/style.css" />
+    <title>Udor :: {% block title %}Main page{% endblock %}</title>
+</head>
+
+<body>
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/bank">Bank list</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    {% block user %}
+    <div id="user">
+    {% if currentUser %}
+      <span name="userNickname">{{currentUser.nickname}}</span>
+      <span name="userEmail">{{currentUser.email}}</span>
+      <span name="logout"><a href="{{logoutUrl}}">logout</a></span>
+    {% else %}
+    <span name="login"><a href="{{loginUrl}}">login</a></span>
+    {% endif %}
+    </div>
+    {% endblock %}
+
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

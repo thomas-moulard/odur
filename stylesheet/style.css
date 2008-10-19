@@ -1,0 +1,35 @@
+body {
+    font-family:Helvetica,Arial,sans-serif;
+    font-size:small;
+    color:#000;
+    background-color:#fff;
+    margin:0 8px
+}
+
+table {
+    margin: 0.5em;
+    padding: 0.5em;
+    border: 1px solid black;
+}
+caption {
+    font-weight: bold;
+    margin-top: 1em;
+}
+
+form {
+    border: 1px solid red;
+}
+
+#user {
+    border: 1px solid green;
+    margin: 0.3em;
+    padding: 0.3em;
+}
+
+.rowEven {
+    color: green;
+}
+
+.rowOdd {
+    color: blue;
+}
