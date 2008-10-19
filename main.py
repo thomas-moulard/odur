@@ -237,11 +237,8 @@ class OperationPage(webapp.RequestHandler):
 
 class MainPage(webapp.RequestHandler):
   def get(self):
-    template_values = {
-      'currentUser': users.get_current_user(),
-      'loginUrl': users.create_login_url("/"),
-      'logoutUrl': users.create_logout_url("/"),
-      }
+    template_values = {}
+    addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'main.html')
     self.response.out.write(template.render(path, template_values))
 
