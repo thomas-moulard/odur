@@ -7,8 +7,12 @@
       <caption>Operation list</caption>
       <tr>
 	<th style="width:1%">&nbsp;</th>
-	<th style="width:88%">Description</th>
-	<th style="width:10%">Amount</th>
+	<th style="width:10%">N°</th>
+	<th style="width:10%">Date</th>
+	<th style="width:57%">Description</th>
+	<th style="width:1%">P</th>
+	<th style="width:10%">Debit</th>
+	<th style="width:10%">Credit</th>
 	<th style="width:1%">Action</th>
       </tr>
 {% for operation in operations %}
@@ -17,17 +21,34 @@
 		   id="operation_{{operation.key}}"
 		   value="{{operation.key}}"/></td>
 	<td>
+{% if operation.p %}{{operation.number}}{% else %}-{% endif %}
+	</td>
+	<td>{{operation.date}}</td>
+	<td style="font-style:italic">
 	  <label for="operation_{{operation.key}}">{{operation.description}}
 	  </label>
 	</td>
-	<td>{{operation.amount|floatformat}}</td>
-	<td><a href="?action=delete&currentAccount={{currentAccount.key}}&key={{operation.key}}">delete</a></td>
+	<td>{% if operation.p %}Yes{% else %}No{% endif %}</td>
+	<td>{{operation.debit|floatformat}}</td>
+	<td>{{operation.credit|floatformat}}</td>
+	<td><a href="?action=delete&account={{currentAccount.key}}&key={{operation.key}}">delete</a></td>
       </tr>
 {% endfor %}
       <tfoot>
 	<tr>
-	  <td colspan="2">Amount:</td>
-	  <td class="{% firstof amountPositive "red" %}">{{currentAmount}}</td>
+	  <td colspan="2">Total debit / credit:</td>
+	  <td colspan="3">&nbsp;</td>
+	  <td>{{currentDebit}}</td>
+	  <td>{{currentCredit}}</td>
+	  <td>&nbsp;</td>
+	</tr>
+	<tr>
+	  <td colspan="2">Total amount:</td>
+	  <td colspan="5"
+	      class="{% firstof amountPositive "red" %}"
+	      style="text-align:right">
+	    {{currentAmount}}
+	  </td>
 	  <td>&nbsp;</td>
 	</tr>
       </tfoot>

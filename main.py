@@ -72,11 +72,23 @@ class Account(db.Model):
   owner = db.UserProperty(required=True)
 
 class Operation(db.Model):
+  number = db.StringProperty()
+  date = db.DateTimeProperty(auto_now_add=True)
+  p = db.BooleanProperty(default=False)
   description = db.StringProperty()
   account = db.ReferenceProperty(required=True)
   amount = DecimalProperty(required=True)
 
 class AccountPage(webapp.RequestHandler):
+  def getTotalAmount(self,account):
+    currentAmount = 0
+    operations_query = Operation.all()
+    operations_query.filter('account =', account)
+    currentAmount=Decimal()
+    for op in operations_query:
+      currentAmount += Decimal(op.amount)
+    return currentAmount
+
   def add(self):
     if users.get_current_user() == None:
       return
@@ -114,6 +126,10 @@ class AccountPage(webapp.RequestHandler):
       accounts_query.filter('owner =', users.get_current_user()).order('name')
       accounts = accounts_query.fetch(10)
 
+      for ac in accounts:
+        ac.amount = self.getTotalAmount(ac)
+        ac.amountPositive = ac.amount > 0
+
     banks_query = Bank.all().order('name')
     banks = banks_query.fetch(10)
 
@@ -122,6 +138,8 @@ class AccountPage(webapp.RequestHandler):
       'banks': banks,
       }
     addCommonTemplateValues(template_values)
+    template_values['accounts'] = accounts
+
     path = os.path.join(os.path.dirname(__file__), 'account.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -219,13 +237,24 @@ class OperationPage(webapp.RequestHandler):
     operations = operations_query.fetch(10)
 
     currentAmount=Decimal()
+    currentCredit=Decimal()
+    currentDebit=Decimal()
     for op in operations:
-      currentAmount += Decimal(op.amount)
+      amount = Decimal(op.amount)
+      if amount < 0:
+        op.debit = op.amount
+        currentDebit += amount
+      else:
+        op.credit = op.amount
+        currentCredit += amount
+      currentAmount += amount
 
     template_values = {
       'operations': operations,
       'currentAccount': account,
       'amountPositive': currentAmount >= 0,
+      'currentCredit': currentCredit,
+      'currentDebit': currentDebit,
       'currentAmount': currentAmount,
       }
     addCommonTemplateValues(template_values)

@@ -12,6 +12,7 @@
 	<th>Creation date</th>
 	<th>Last update</th>
 	<th>Owner</th>
+	<th>Amount</th>
 	<th style="width:1%">Action</th>
       </tr>
 {% for account in accounts %}
@@ -26,6 +27,8 @@
 	<td>{{account.dateCreation}}</td>
 	<td>{{account.dateOwner}}</td>
 	<td>{{account.owner}}</td>
+	<td class="{% firstof account.amountPositive "red" %}">
+	{{account.amount}}</td>
 	<td>
 	  <a href="?action=delete&key={{account.key}}">delete</a>
 	</td>
