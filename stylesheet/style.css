@@ -18,6 +18,9 @@ form label:after {
     content: ':';
 }
 
+form label.radio { font-weight: normal; }
+form label.radio:after { content:''; }
+
 .userEmail { font-weight: bold; }
 .login {}
 .logout {}

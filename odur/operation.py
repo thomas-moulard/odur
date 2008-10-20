@@ -9,8 +9,8 @@ from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
-from odur.common import addCommonTemplateValues
-from odur.model import Account, Bank, Operation
+from odur.common import addCommonTemplateValues, ref_exists
+from odur.model import Account, Bank, Operation, PayeeCategory
 
 
 class OperationPage(webapp.RequestHandler):
@@ -21,6 +21,8 @@ class OperationPage(webapp.RequestHandler):
       number = self.request.get('number'),
       date = datetime.now(), #FIXME
       description = self.request.get('description'),
+      #payee,
+      categories = db.get(self.request.get('category')),
       account = db.get(self.request.get('account')),
       amount = self.request.get('amount')
       )
@@ -32,6 +34,8 @@ class OperationPage(webapp.RequestHandler):
     if self.request.get('key') == None:
       return
     operation = db.get(self.request.get('key'))
+    if not operation or not operation.account.owner:
+      return
     if operation.account.owner == users.get_current_user():
       operation.delete()
 
@@ -66,6 +70,8 @@ class OperationPage(webapp.RequestHandler):
     currentCredit=Decimal()
     currentDebit=Decimal()
     for op in operations:
+      if not ref_exists(op, "categories"):
+        op.categories = None
       amount = Decimal(op.amount)
       if amount < 0:
         op.debit = op.amount
@@ -75,6 +81,17 @@ class OperationPage(webapp.RequestHandler):
         currentCredit += amount
       currentAmount += amount
 
+    categories_query = PayeeCategory.all().order('name')
+    categories=[]
+    for category in categories_query:
+      part = category.name.partition('/')
+      if part[1] == '':
+        category.root = ''
+      else:
+        category.root = part[0].encode('utf-8')
+        category.name = part[2]
+      categories.append(category)
+
     template_values = {
       'operations': operations,
       'currentAccount': account,
@@ -82,6 +99,7 @@ class OperationPage(webapp.RequestHandler):
       'currentCredit': currentCredit,
       'currentDebit': currentDebit,
       'currentAmount': currentAmount,
+      'categories': categories,
       }
     addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'operation.html')

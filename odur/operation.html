@@ -26,7 +26,11 @@
 	<td>{{operation.date|date:"Y l F jS f a"}}</td>
 	<td style="font-style:italic">
 	  <label for="operation_{{operation.key}}">{{operation.description}}
-	  </label>
+	  </label><br/>
+	  {{operation.payee.name}}</br>
+	  {% if operation.categories %}
+	  {{operation.categories.name}}&nbsp;
+	  {% endif %}
 	</td>
 	<td>{{operation.p|yesno}}</td>
 	<td>{{operation.debit|floatformat}}</td>
@@ -55,19 +59,31 @@
       <div>
 	<label for="datey">Date (empty for now)</label>
 	<input type="text" id="datey" name="date_year"
-	       size="4" maxlength="4"></input>
+	       size="4" maxlength="4"/>
 	<input type="text" id="datem" name="date_month"
-	       size="2" maxlength="2"></input>
+	       size="2" maxlength="2"/>
 	<input type="text" id="dated" name="date_day"
-	       size="2" maxlength="2"></input>
+	       size="2" maxlength="2"/>
 	<input type="text" id="dateh" name="date_hour"
-	       size="2" maxlength="2"></input>
+	       size="2" maxlength="2"/>
 	<input type="text" id="datem" name="date_minute"
-	       size="2" maxlength="2"></input>
+	       size="2" maxlength="2"/>
       </div>
       <div>
 	<label for="description">Description</label>
 	<input type="text" id="description" name="description"></input>
+      </div>
+      <div>
+	<label for="category">Category</label>
+	<select name="category" id="category">
+	  <optgroup label="">
+{% for category in categories %}
+{% ifchanged category.root %}</optgroup><optgroup label="{{category.root}}">{% endifchanged %}
+		<option id="category_{{category.key}}"
+			value="{{category.key}}">{{category.name}}</option>
+{% endfor %}
+	  </optgroup>
+        </select>
       </div>
       <div>
 	<label for="amount">Amount</label>

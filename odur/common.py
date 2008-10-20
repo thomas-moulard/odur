@@ -16,3 +16,6 @@ def addCommonTemplateValues(template_values):
     accounts_query.filter('owner =', users.get_current_user()).order('name')
     accounts = accounts_query.fetch(10)
   template_values['accounts'] = accounts
+
+def ref_exists(obj, slot):
+  return obj.__dict__['_RESOLVED_' + slot] is not None

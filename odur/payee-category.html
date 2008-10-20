@@ -1,0 +1,47 @@
+{% extends "../base.html" %}
+
+{% block title %}View payee categories{% endblock %}
+
+{% block content %}
+    <table id="payeeCategoryList">
+      <caption>Category list</caption>
+      <tr>
+	<th style="width:1%">&nbsp;</th>
+	<th>Payee category name</th>
+	<th style="width:10%">Owner</th>
+	<th style="width:1%">Action</th>
+      </tr>
+{% for category in payeeCategories %}
+      <tr class="{% cycle rowEven,rowOdd %}">
+	<td><input type="checkbox" name="category[]"
+		   id="category_{{category.key}}"
+		   value="{{category.key}}"/></td>
+	<td>
+	  <label for="category_{{category.key}}">{{category.name}}</label>
+	</td>
+	<td>
+{% if category.owner %}{{category.owner}}{% else %}Global{% endif %}
+</td>
+	<td><a href="?action=delete&key={{category.key}}">delete</a></td>
+      </tr>
+{% endfor %}
+    </table>
+
+    <form action="" method="post" name="addPayeeCategory">
+      <div>
+	<label for="name">Category name</label>
+	<input type="text" id="name" name="name"></input>
+      </div>
+      <div>
+	<label for="owner">Owner</label>
+	<input type="radio" id="owner_global" name="owner" value=""/>
+	<label for="owner_global" class="radio">Global</label>
+	<input type="radio" id="owner_me" name="owner"
+	       checked="checked"
+	       value="{{currentUser}}"/>
+	<label for="owner_me" class="radio">Only me</label>
+      </div>
+      <div><input type="submit" value="Add category"></div>
+      <input type="hidden" name="action" value="add"/>
+    </form>
+{% endblock %}

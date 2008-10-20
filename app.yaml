@@ -7,6 +7,9 @@ handlers:
 - url: /stylesheet
   static_dir: stylesheet
 
+- url: /favicon.ico
+  static_dir: favicon.ico
+
 - url: /image
   static_dir: image
 

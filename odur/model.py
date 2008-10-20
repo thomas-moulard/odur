@@ -37,11 +37,20 @@ class Account(db.Model):
   dateUpdate = db.DateTimeProperty(auto_now=True)
   owner = db.UserProperty(required=True)
 
+class PayeeCategory(db.Model):
+  name = db.StringProperty(required=True)
+  owner = db.UserProperty()
+
+class Payee(db.Model):
+  name = db.StringProperty(required=True)
+  owner = db.UserProperty()
+
 class Operation(db.Model):
   number = db.StringProperty()
   date = db.DateTimeProperty(auto_now_add=True)
   p = db.BooleanProperty(default=False)
   description = db.StringProperty()
-  account = db.ReferenceProperty(required=True)
+  payee = db.ReferenceProperty(Payee, required=False)
+  categories = db.ReferenceProperty(PayeeCategory, required=False)
+  account = db.ReferenceProperty(Account,required=True)
   amount = DecimalProperty(required=True)
-
