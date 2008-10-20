@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
 from datetime import datetime
@@ -39,6 +40,49 @@ class OperationPage(webapp.RequestHandler):
     if operation.account.owner == users.get_current_user():
       operation.delete()
 
+  def categoryChart(self, account, title="Category chart", id=None):
+    if account is None:
+      return ""
+    if not users.is_current_user_admin():
+      if account.owner is not users.get_current_user():
+        return ""
+    if id is None:
+      id = "category_chart_" + account.key().__str__()
+
+    operations_query = Operation.all()
+    operations_query.filter('account =', account)
+
+    values = {}
+    for op in operations_query:
+      values[op.categories] = op.amount
+
+    str = """
+    <script type=\"text/javascript\">
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Number of operations');
+        data.addRows(%i);
+"""% (len(values.keys()))
+
+    i = 0
+    for k,v in values.iteritems():
+      str += "data.setValue(%i, 0,'%s');\n" % (i,k.name)
+      str += "data.setValue(%i, 1,%s);\n" % (i,v)
+      i += 1
+
+    str += """
+        var chart = new google.visualization.PieChart(document.getElementById('%s'));
+        chart.draw(data, {width: 400, height: 240, is3D: true, title: '%s'});
+      }
+    </script>
+    <div id='%s'></div>
+""" % (id,title,id)
+
+    return str
+
+
   def handleActions(self):
     if users.get_current_user() == None:
       self.redirect(users.create_login_url('/account'))
@@ -73,8 +117,6 @@ class OperationPage(webapp.RequestHandler):
     currentCredit=Decimal()
     currentDebit=Decimal()
     for op in operations:
-      if not ref_exists(op, "categories"):
-        op.categories = None
       amount = Decimal(op.amount)
       if amount < 0:
         op.debit = op.amount
@@ -91,7 +133,7 @@ class OperationPage(webapp.RequestHandler):
       if part[1] == '':
         category.root = ''
       else:
-        category.root = part[0].encode('utf-8')
+        category.root = part[0]
         category.name = part[2]
       categories.append(category)
 
@@ -103,6 +145,7 @@ class OperationPage(webapp.RequestHandler):
       'currentDebit': currentDebit,
       'currentAmount': currentAmount,
       'categories': categories,
+      'chart': self.categoryChart(account)
       }
     addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'operation.html')

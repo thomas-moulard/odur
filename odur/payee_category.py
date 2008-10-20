@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
 
@@ -34,12 +35,28 @@ class PayeeCategoryPage(webapp.RequestHandler):
             return
     payeeCategory.delete()
 
+  def initializeData(self):
+    if not users.is_current_user_admin():
+      return
+    if PayeeCategory.all().count() is not 0:
+      return
+
+    PayeeCategory(name='Expense/Culture').put()
+    PayeeCategory(name='Expense/Food').put()
+    PayeeCategory(name='Expense/Transportation').put()
+
+    PayeeCategory(name='Takings/Salary').put()
+
+
   def handleActions(self):
     if self.request.get('action') == 'delete':
       self.delete()
       self.redirect('/payee-category')
     if self.request.get('action') == 'add':
       self.add()
+      self.redirect('/payee-category')
+    if self.request.get('action') == 'initializeData':
+      self.initializeData()
       self.redirect('/payee-category')
 
   def get(self):

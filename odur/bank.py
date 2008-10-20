@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
 
@@ -29,12 +30,29 @@ class BankPage(webapp.RequestHandler):
     bank = db.get(self.request.get('key'))
     bank.delete()
 
+  def initializeData(self):
+    if not users.is_current_user_admin():
+      return
+    if Bank.all().count() is not 0:
+      return
+
+    Bank(name='BNP Paribas').put()
+    Bank(name='Banque de Bretagne').put()
+    Bank(name=u'Crédit agricole SA').put()
+    Bank(name='LCL').put()
+    Bank(name=u'Société générale').put()
+    Bank(name='Boursorama').put()
+    Bank(name=u'Crédit du Nord').put()
+
   def handleActions(self):
     if self.request.get('action') == 'delete':
       self.delete()
       self.redirect('/bank')
     if self.request.get('action') == 'add':
       self.add()
+      self.redirect('/bank')
+    if self.request.get('action') == 'initializeData':
+      self.initializeData()
       self.redirect('/bank')
 
   def get(self):

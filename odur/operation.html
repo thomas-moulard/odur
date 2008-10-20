@@ -1,6 +1,6 @@
 {% extends "../base.html" %}
 
-{% block title %}View operations for currentAccount ``{{currentAccount.name}}'' {% endblock %}
+{% block title %}View operations for ``{{currentAccount.name}}'' {% endblock %}
 
 {% block content %}
     <table id="operationList">
@@ -109,4 +109,7 @@
 	     value="{{currentAccount.key}}"/>
       <input type="hidden" name="action" value="add"/>
     </form>
+
+    {{chart}}
+
 {% endblock %}
