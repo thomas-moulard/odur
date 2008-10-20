@@ -19,7 +19,7 @@ class OperationPage(webapp.RequestHandler):
       return
     operation = Operation(
       number = self.request.get('number'),
-      date = datetime.now(), #FIXME
+      date = datetime.strptime(self.request.get('date'),'%m/%d/%Y'),
       description = self.request.get('description'),
       #payee,
       categories = db.get(self.request.get('category')),

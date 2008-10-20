@@ -57,17 +57,18 @@
 	<input type="text" id="number" name="number"></input>
       </div>
       <div>
-	<label for="datey">Date (empty for now)</label>
-	<input type="text" id="datey" name="date_year"
-	       size="4" maxlength="4"/>
-	<input type="text" id="datem" name="date_month"
-	       size="2" maxlength="2"/>
-	<input type="text" id="dated" name="date_day"
-	       size="2" maxlength="2"/>
-	<input type="text" id="dateh" name="date_hour"
-	       size="2" maxlength="2"/>
-	<input type="text" id="datem" name="date_minute"
-	       size="2" maxlength="2"/>
+	<label for="date">Date</label>
+
+	<script>
+	  $(document).ready(function(){
+	  $('#date').datepicker({
+	  showOn: "button",
+	  buttonImage: "image/calendar.gif",
+	  buttonImageOnly: true} );
+	  });
+	</script>
+	<input type="text" id="date" value="{% now "m/d/Y" %}" name="date"
+	       style="width:100px;"/>
       </div>
       <div>
 	<label for="description">Description</label>
