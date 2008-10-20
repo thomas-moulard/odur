@@ -21,12 +21,26 @@
 		   id="operation_{{operation.key}}"
 		   value="{{operation.key}}"/></td>
 	<td>
-{% if operation.number %}{{operation.number}}{% else %}-{% endif %}
+	  <p id="editnumber_{{operation.key}}"
+	     name="editnumber_{{operation.key}}">{% if operation.number %}{{operation.number}}{% else %}-{% endif %}</p>
+
+	  <script type="text/javascript">
+	    new Ajax.InPlaceEditor('editnumber_{{operation.key}}',
+	    '/foo', {size:10});
+	  </script>
 	</td>
 	<td>{{operation.date|date:"Y l F jS f a"}}</td>
 	<td style="font-style:italic">
-	  <label for="operation_{{operation.key}}">{{operation.description}}
+	  <label for="operation_{{operation.key}}">
+	  <p id="editdescr_{{operation.key}}"
+	     name="editdescr_{{operation.key}}">{{operation.description}}</p>
 	  </label><br/>
+
+	  <script type="text/javascript">
+	    new Ajax.InPlaceEditor('editdescr_{{operation.key}}',
+	    '/foo', {size:20});
+	  </script>
+
 	  {{operation.payee.name}}</br>
 	  {% if operation.categories %}
 	  {{operation.categories.name}}&nbsp;
@@ -60,8 +74,8 @@
 	<label for="date">Date</label>
 
 	<script>
-	  $(document).ready(function(){
-	  $('#date').datepicker({
+	  jQuery(document).ready(function(){
+	  jQuery('#date').datepicker({
 	  showOn: "button",
 	  buttonImage: "image/calendar.gif",
 	  buttonImageOnly: true} );
