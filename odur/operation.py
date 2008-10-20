@@ -148,6 +148,7 @@ class OperationPage(webapp.RequestHandler):
       categories.append(category)
 
     template_values = {
+      'currency': '&euro;', #FIXME
       'operations': operations,
       'currentAccount': account,
       'amountPositive': currentAmount >= 0,

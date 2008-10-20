@@ -47,24 +47,25 @@
 	  {% endif %}
 	</td>
 	<td>{{operation.p|yesno}}</td>
-	<td>{{operation.debit|floatformat}}</td>
-	<td>{{operation.credit|floatformat}}</td>
+	<td>{% if operation.debit %}{{operation.debit|floatformat}} {{currency}} {% endif %}</td>
+	<td>{% if operation.credit %}{{operation.credit|floatformat}} {{currency}}{% endif %}</td>
 	<td><a href="?action=delete&account={{currentAccount.key}}&key={{operation.key}}">delete</a></td>
       </tr>
 {% endfor %}
       <tfoot>
 	<tr>
 	  <td colspan="5">Total:</td>
-	  <td>{{currentDebit}}</td>
-	  <td>{{currentCredit}}</td>
+	  <td>{{currentDebit|floatformat}} {{currency}}</td>
+	  <td>{{currentCredit|floatformat}} {{currency}}</td>
 	  <td class="{% firstof amountPositive "red" %}"
 	      style="text-align:right">
-	    {{currentAmount}}
+	    {{currentAmount|floatformat}} {{currency}}
 	  </td>
 	</tr>
       </tfoot>
     </table>
 
+    <h2>Add a new operation</h2>
     <form action="" method="post" name="addOperation">
       <div>
 	<label for="number">Number</label>
@@ -110,9 +111,17 @@
       <input type="hidden" name="action" value="add"/>
     </form>
 
+    <hr/>
     <h2>Charts</h2>
 
     {{chartExpense}}
     {{chartTakings}}
+
+
+    <hr/>
+    <h2>Export</h2>
+    <ul>
+      <li>TODO</li>
+    </ul>
 
 {% endblock %}
