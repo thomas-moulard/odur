@@ -41,6 +41,9 @@ class AccountPage(webapp.RequestHandler):
       account.delete()
 
   def handleActions(self):
+    if users.get_current_user() == None:
+      self.redirect(users.create_login_url('/account'))
+
     if self.request.get('action') == 'delete':
       self.delete()
       self.redirect('/account')

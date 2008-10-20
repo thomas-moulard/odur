@@ -123,6 +123,7 @@
 
     <ul>
       <li><a href="/">Home</a></li>
+{% if currentUser %}
       <li>
 	<a href="/account">Accounts</a>
 	<ul>
@@ -131,7 +132,9 @@
 {% endfor %}
       </ul>
       </li>
+{% endif %}
       <li><a href="/bank">Banks</a></li>
+      <li><a href="/payee">Payee</a></li>
       <li><a href="/payee-category">Payee categories</a></li>
     </ul>
 

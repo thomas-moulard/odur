@@ -1,0 +1,80 @@
+								-*- outline -*-
+
+* Visualization:
+** Pages
+** Group actions (select: none, all...)
+** Order
+** Inplace edit
+** Warn before delete
+
+* Account: add IBAN number (or paypal email?), validate it
+** Handle currencies!!!! (euro, dollar)
+*** Should be able to display amount conversion into another currency
+
+* Bank: add international bank number, validate it(?)
+** Read only for non admin
+** Idea: bank comparison (integrate fees...)
+
+* Bill tracking: all (images related to a specific operation)
+
+* Payee: all
+** link with contact API for contact info
+*** (but can't be a contact element because IBAN number is associated)
+
+* Operation: calendar month view
+** Number validation (?)
+** Add payee
+** Autocompleter on payee
+** Periodic operations
+** Warn if operation with wrong payee categorie (debit/credit)
+** Link with incident trackins (public incidents, make stats on Payees)
+** Import operation from objects/bills (barcode, bill scan see bill justif)
+** Add no category.
+
+* Reminder: link with gmail
+** Trigger (debit/credit...)
+** Weekly/Monthly...
+
+* Budget
+** Chart (part of each category)
+** State of an account over a month/year...
+
+* Dashboard/widgets
+** iGoogle integration?
+** Desktop widget
+
+* i18n/l11n
+** Data, Float
+
+* Dev/Debug/Safety:
+** Orphan management
+** Auto-add sample data/default global data
+** Check decimal computations
+
+* User documentation
+** Embedded
+** YouTube
+
+* Right management
+** ACL on accounts (like google calendar)
+** Public accounts (public/private URLs)
+** Collaboration (send e-mail, etc.)
+
+* Integration
+** Paypal (?)
+** Online banking systems
+** Pay bills online (money transfer?)
+
+* Import:
+** Microsoft Money
+** GNU Cash
+** Quicken
+
+* Export:
+** CSV
+** PDF
+** RSS/Atom
+
+* Backup data (?)
+** Rollback (?)
+
