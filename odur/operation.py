@@ -40,7 +40,7 @@ class OperationPage(webapp.RequestHandler):
     if operation.account.owner == users.get_current_user():
       operation.delete()
 
-  def categoryChart(self, account, title="Category chart", id=None):
+  def categoryChart(self, account, showExpense=True, title=None, id=None):
     if account is None:
       return ""
     if not users.is_current_user_admin():
@@ -48,13 +48,23 @@ class OperationPage(webapp.RequestHandler):
         return ""
     if id is None:
       id = "category_chart_" + account.key().__str__()
+    if title is None:
+      if showExpense:
+        title = "Expense by payee category"
+      else:
+        title = "Takings by payee category"
 
     operations_query = Operation.all()
     operations_query.filter('account =', account)
 
     values = {}
     for op in operations_query:
-      values[op.categories] = op.amount
+      if showExpense:
+        if op.amount < 0:
+          values[op.categories] = -op.amount
+      else:
+        if op.amount > 0:
+          values[op.categories] = op.amount
 
     str = """
     <script type=\"text/javascript\">
@@ -145,7 +155,8 @@ class OperationPage(webapp.RequestHandler):
       'currentDebit': currentDebit,
       'currentAmount': currentAmount,
       'categories': categories,
-      'chart': self.categoryChart(account)
+      'chartExpense': self.categoryChart(account),
+      'chartTakings': self.categoryChart(account, showExpense=False)
       }
     addCommonTemplateValues(template_values)
     path = os.path.join(os.path.dirname(__file__), 'operation.html')

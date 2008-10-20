@@ -15,7 +15,7 @@ class DecimalProperty(db.Property):
   def make_value_from_datastore(self, value):
     if value is None:
       return None
-    return value
+    return Decimal(value)
 
   def validate(self, value):
     v = Decimal(value)
