@@ -119,8 +119,13 @@ class OperationPage(webapp.RequestHandler):
       self.redirect('/')
       return
 
+    order = self.request.get('order')
+    if order is '':
+      order = 'date'
+
     operations_query = Operation.all()
     operations_query.filter('account =', db.get(self.request.get('account')))
+    operations_query.order(order)
     operations = operations_query.fetch(10)
 
     currentAmount=Decimal()

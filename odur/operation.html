@@ -2,14 +2,21 @@
 
 {% block title %}View operations for ``{{currentAccount.name}}'' {% endblock %}
 
+
 {% block content %}
     <table id="operationList">
       <caption>Operation list</caption>
       <tr>
 	<th style="width:1%">&nbsp;</th>
-	<th style="width:10%">N°</th>
-	<th style="width:25%">Date</th>
-	<th style="width:42%">Description</th>
+	<th style="width:10%">
+<a href="?account={{currentAccount.key}}&order=number">N°</a>
+	</th>
+	<th style="width:25%">
+<a href="?account={{currentAccount.key}}&order=date">Date</a>
+	</th>
+	<th style="width:42%">
+<a href="?account={{currentAccount.key}}&order=description">Description</a>
+	</th>
 	<th style="width:1%">P</th>
 	<th style="width:10%">Debit</th>
 	<th style="width:10%">Credit</th>
@@ -74,7 +81,7 @@
       <div>
 	<label for="date">Date</label>
 
-	<script>
+	<script type="text/javascript">
 	  jQuery(document).ready(function(){
 	  jQuery('#date').datepicker({
 	  showOn: "button",
