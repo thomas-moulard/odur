@@ -155,7 +155,13 @@
 
 <a name="odur-pagecontent-anchor"></a>
 <div class="odur-unit" id="odur-pagecontent">
-  <!-- <h1 class="page_title">FIXME</h1> //-->
+
+  {% block message %}
+  {% for msg in messages %}
+  <div class="message">{{msg}}</div>
+  {% endfor %}
+  {% endblock %}
+
   {% block content %}{% endblock %}
 </div>
 

@@ -67,7 +67,7 @@ class PayeeCategoryPage(webapp.RequestHandler):
     template_values = {
       'payeeCategories': payeeCategories,
       }
-    addCommonTemplateValues(template_values)
+    addCommonTemplateValues(template_values, self)
     path = os.path.join(os.path.dirname(__file__), 'payee-category.html')
     self.response.out.write(template.render(path, template_values))
 

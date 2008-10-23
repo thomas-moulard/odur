@@ -22,6 +22,8 @@ class BankPage(GenericViewer):
         or action is 'default'):
       return True
     if not users.is_current_user_admin():
+      self.messages.append('Insufficient permissions.')
+      self.redirect()
       return False
     return True
 
@@ -53,5 +55,15 @@ class BankPage(GenericViewer):
       Bank(name=u'Société générale'),
       Bank(name='Boursorama'),
       Bank(name=u'Crédit du Nord'),
+      Bank(name=u'Caisse d\'épargne'),
+      Bank(name=u'Groupe Banque populaire'),
+      Bank(name=u'BRED'),
+      Bank(name=u'Crédit Coopératif'),
+      Bank(name=u'CASDEN,'),
+      Bank(name=u'Crédit Maritime'),
+      Bank(name=u'Natixis'),
+      Bank(name=u'Crédit mutuel'),
+      Bank(name=u'Crédit industriel et commercial (CIC)'),
+
       ]
     return GenericViewer.initializeData(self, data)

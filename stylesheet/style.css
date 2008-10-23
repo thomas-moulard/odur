@@ -18,8 +18,8 @@ form label:after {
     content: ':';
 }
 
-form label.radio { font-weight: normal; }
-form label.radio:after { content:''; }
+form label.radio, form table label { font-weight: normal; }
+form label.radio:after, form table label:after { content:''; }
 
 .userEmail { font-weight: bold; }
 .login {}
@@ -41,4 +41,14 @@ form label.radio:after { content:''; }
 #operationList tfoot tr {
     border-top: 2px solid #36C;
     font-weight: bold;
+}
+
+div.message {
+    color:#a00;
+    font-weight:bold;
+    text-align:center;
+    padding:0.1em;
+    margin:0.5em;
+    border:1px solid #36C;
+    background-color:#e5ecf9
 }

@@ -73,7 +73,7 @@ class AccountPage(webapp.RequestHandler):
     template_values = {
       'banks': banks,
       }
-    addCommonTemplateValues(template_values)
+    addCommonTemplateValues(template_values, self)
     template_values['accounts'] = accounts
 
     path = os.path.join(os.path.dirname(__file__), 'account.html')

@@ -164,7 +164,7 @@ class OperationPage(webapp.RequestHandler):
       'chartExpense': self.categoryChart(account),
       'chartTakings': self.categoryChart(account, showExpense=False)
       }
-    addCommonTemplateValues(template_values)
+    addCommonTemplateValues(template_values, self)
     path = os.path.join(os.path.dirname(__file__), 'operation.html')
     self.response.out.write(template.render(path, template_values))
 

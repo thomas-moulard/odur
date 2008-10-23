@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from urllib import urlencode
 
 from google.appengine.api import users
 from google.appengine.ext import db
@@ -14,13 +15,20 @@ class GenericViewer(webapp.RequestHandler):
     action = None
     model = None
     url = None
+    messages = []
+    order = None
+    limit = 10
+    offset = 0
 
     def __init__(self, model, url):
         self.model = model
         self.url = url
 
+
     def checkPermissions(self, action):
         if not users.is_current_user_admin():
+            self.messages.append('Error: insufficient permissions.')
+            self.redirect()
             return False
         return True
 
@@ -37,17 +45,20 @@ class GenericViewer(webapp.RequestHandler):
 
     def delete(self):
         if self.request.get('key') == None:
+            print 'toto'
             return False
         item = db.get(self.request.get('key'))
         if item is None:
-            self.redirect(self.url)
+            print 'toto'
             return False
         item.delete()
-        self.redirect(self.url)
+        self.messages.append('Item successfully deleted.')
+        self.redirect()
         return True
 
     def initializeData(self, data=None):
         if self.model.all().count() is not 0:
+            self.messages.append('Error: database not empty.')
             self.redirect()
             return False
         for i in data:
@@ -57,13 +68,40 @@ class GenericViewer(webapp.RequestHandler):
     def view(self):
         lmodel = self.model.__name__.lower()
 
+        if self.request.get('order'):
+            self.order = self.request.get('order')
+        if self.request.get('limit'):
+            self.limit = int(self.request.get('limit'))
+        if self.request.get('offset'):
+            self.offset = int(self.request.get('offset'))
+
         items_query = self.model.all()
-        items = items_query.fetch(10)
+        total = items_query.count()
+        if self.order is not None:
+            items_query.order(self.order)
+        items = items_query.fetch(self.limit, self.offset)
 
         template_values = {
+            'limit': self.limit,
+            'offset': self.offset,
+            'order': self.order,
+            'total': total,
             lmodel+'s': items,
             }
-        addCommonTemplateValues(template_values)
+        addCommonTemplateValues(template_values, self)
+
+        if self.offset > 0:
+            prev = self.offset - self.limit
+            if prev < 0:
+                prev = 0
+            template_values['prev_url'] = (
+                self.url + '?offset=%s' % prev)
+
+        if self.offset + self.limit < total:
+            next = self.offset + self.limit
+            template_values['next_url'] = (
+                self.url + '?offset=%s' % next)
+
         path = os.path.join(os.path.dirname(__file__),
                             '%s.html' % lmodel)
         self.response.out.write(template.render(path, template_values))
@@ -97,10 +135,12 @@ class GenericViewer(webapp.RequestHandler):
 
 
     # Redefine redirec with default URL.
-    def redirect(self, uri = None, permanent=False):
+    def redirect(self, uri = None, permanent=False,
+                 extraArgs=None):
         if uri is None:
-            return webapp.RequestHandler.redirect(self,
-                                                  self.url, permanent)
-        else:
-            return webapp.RequestHandler.redirect(self,
-                                                  uri, permanent)
+            uri = self.url
+        if not isinstance(extraArgs, dict):
+            extraArgs = {}
+        extraArgs['messages[]'] =  self.messages
+        uri += '?' + urlencode(extraArgs, True)
+        return webapp.RequestHandler.redirect(self, uri, permanent)

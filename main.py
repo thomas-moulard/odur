@@ -17,7 +17,7 @@ from odur.payee_category import PayeeCategoryPage
 class MainPage(webapp.RequestHandler):
   def get(self):
     template_values = {}
-    addCommonTemplateValues(template_values)
+    addCommonTemplateValues(template_values, self)
     path = os.path.join(os.path.dirname(__file__), 'main.html')
     self.response.out.write(template.render(path, template_values))
 

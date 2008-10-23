@@ -3,8 +3,48 @@
 {% block title %}View banks{% endblock %}
 
 {% block content %}
+<script type="text/javascript">
+function setAllCheckBoxes(FormName, FieldName, CheckValue)
+{
+  if(!document.forms[FormName])
+    return;
+  var objCheckBoxes = document.forms[FormName].elements[FieldName];
+  if(!objCheckBoxes)
+    return;
+  var countCheckBoxes = objCheckBoxes.length;
+  if(!countCheckBoxes)
+    objCheckBoxes.checked = CheckValue;
+  else
+    for(var i = 0; i < countCheckBoxes; i++)
+      objCheckBoxes[i].checked = CheckValue;
+}
+</script>
+
+<form action="" method="post" name="mass_action">
     <table id="bankList">
       <caption>Bank list</caption>
+      <tr>
+	<th colspan="3">
+<div style="text-align:left; float: left">
+  <input type="submit" name="delete" value="delete" />
+  <br/>
+  <div style="margin:0.1em">Select:
+    <a href="javascript:setAllCheckBoxes('mass_action','bank[]', '1')">All</a>,
+    <a href="javascript:setAllCheckBoxes('mass_action','bank[]', '')">None</a>
+  </div>
+</div>
+
+<div style="text-align:right; float: right">
+  {% if prev_url %}
+  <a href="{{prev_url}}">&lsaquo; Previous</a>
+  {% endif %}
+  {{offset|add:1}} - {{offset|add:limit}} of {{total}}
+  {% if next_url %}
+  <a href="{{next_url}}">&rsaquo; Next</a>
+  {% endif %}
+</div>
+	</th>
+      </tr>
       <tr>
 	<th style="width:1%">&nbsp;</th>
 	<th>Bank name</th>
@@ -20,6 +60,7 @@
       </tr>
 {% endfor %}
     </table>
+</form>
 
     <form action="" method="post" name="addBank">
       <div>
