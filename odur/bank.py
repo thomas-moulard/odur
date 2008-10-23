@@ -7,6 +7,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from google.appengine.ext.webapp.util import login_required
 
 from odur.common import addCommonTemplateValues
 from odur.generic_viewer import GenericViewer
@@ -16,6 +17,15 @@ class BankPage(GenericViewer):
   def __init__(self):
     GenericViewer.__init__(self, Bank, '/bank')
 
+  def checkPermissions(self, action):
+    if (action is 'view'
+        or action is 'default'):
+      return True
+    if not users.is_current_user_admin():
+      return False
+    return True
+
+  @login_required
   def add(self):
     if GenericViewer.add(self):
       return False
@@ -26,12 +36,14 @@ class BankPage(GenericViewer):
     self.redirect()
     return True
 
+  @login_required
   def delete(self):
     if not GenericViewer.delete(self):
       return False
 #TODO: delete bank's operation.
     return True
 
+  @login_required
   def initializeData(self):
     data=[
       Bank(name='BNP Paribas'),

@@ -32,6 +32,7 @@ class GenericViewer(webapp.RequestHandler):
         return False
 
     def default(self):
+        self.action='view'
         return self.view()
 
     def delete(self):
