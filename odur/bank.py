@@ -21,7 +21,7 @@ class BankPage(GenericViewer):
         or action is 'default'):
       return True
     if not users.is_current_user_admin():
-      self.messages.append('Insufficient permissions.')
+      self.messages.append('Error: insufficient permissions.')
       self.redirect()
       return False
     return True
@@ -33,6 +33,7 @@ class BankPage(GenericViewer):
       name = self.request.get('name'),
       )
     bank.put()
+    self.messages.append('Bank successfully added.')
     self.redirect()
     return True
 
