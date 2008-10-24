@@ -45,16 +45,26 @@ class GenericViewer(webapp.RequestHandler):
 
     def delete(self):
         if self.request.get('key') == None:
-            print 'toto'
+            self.messages.append('Error: no item key given.')
+            self.redirect()
             return False
-        item = db.get(self.request.get('key'))
-        if item is None:
-            print 'toto'
-            return False
-        item.delete()
-        self.messages.append('Item successfully deleted.')
+        key = self.request.get('key', allow_multiple=True)
+        if not isinstance(key, list):
+            key = [key]
+
+        success = True
+        for k in key:
+            item = db.get(k)
+            if item is None:
+                self.messages.append('Error: the item ``%s\'\' does not exist.'
+                                     % k)
+                success = False
+            item.delete()
+
+        if success:
+            self.messages.append('Item successfully deleted.')
         self.redirect()
-        return True
+        return success
 
     def initializeData(self, data=None):
         if self.model.all().count() is not 0:
@@ -63,6 +73,13 @@ class GenericViewer(webapp.RequestHandler):
             return False
         for i in data:
             i.put()
+        self.messages.append('Database successfully initialized.')
+        self.redirect()
+        return True
+
+    def massModification(self):
+        if self.request.get('delete') is not None:
+            self.delete()
         return True
 
     def view(self):
@@ -86,6 +103,7 @@ class GenericViewer(webapp.RequestHandler):
             'offset': self.offset,
             'order': self.order,
             'total': total,
+            'max_item': min(self.offset + self.limit, total),
             lmodel+'s': items,
             }
         addCommonTemplateValues(template_values, self)
@@ -117,10 +135,12 @@ class GenericViewer(webapp.RequestHandler):
         'delete': __callAction(delete),
         'default': __callAction(default),
         'initializeData': __callAction(initializeData),
+        'mass_modification': __callAction(massModification),
         'view': __callAction(view),
         }
 
     def handleActions(self):
+        self.messages = []
         if self.action is None:
             self.action = self.request.get('action')
         if self.action is '':

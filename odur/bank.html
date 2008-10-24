@@ -20,7 +20,9 @@ function setAllCheckBoxes(FormName, FieldName, CheckValue)
 }
 </script>
 
-<form action="" method="post" name="mass_action">
+<form action="" method="post" name="mass_modification">
+  <input type="hidden" name="action" value="mass_modification"/>
+
     <table id="bankList">
       <caption>Bank list</caption>
       <tr>
@@ -29,8 +31,8 @@ function setAllCheckBoxes(FormName, FieldName, CheckValue)
   <input type="submit" name="delete" value="delete" />
   <br/>
   <div style="margin:0.1em">Select:
-    <a href="javascript:setAllCheckBoxes('mass_action','bank[]', '1')">All</a>,
-    <a href="javascript:setAllCheckBoxes('mass_action','bank[]', '')">None</a>
+    <a href="javascript:setAllCheckBoxes('mass_modification','key', '1')">All</a>,
+    <a href="javascript:setAllCheckBoxes('mass_modification','key', '')">None</a>
   </div>
 </div>
 
@@ -38,7 +40,7 @@ function setAllCheckBoxes(FormName, FieldName, CheckValue)
   {% if prev_url %}
   <a href="{{prev_url}}">&lsaquo; Previous</a>
   {% endif %}
-  {{offset|add:1}} - {{offset|add:limit}} of {{total}}
+  {{offset|add:1}} - {{max_item}} of {{total}}
   {% if next_url %}
   <a href="{{next_url}}">&rsaquo; Next</a>
   {% endif %}
@@ -50,15 +52,21 @@ function setAllCheckBoxes(FormName, FieldName, CheckValue)
 	<th>Bank name</th>
 	<th style="width:1%">Action</th>
       </tr>
+{% if banks %}
 {% for bank in banks %}
       <tr class="{% cycle rowEven,rowOdd %}">
-	<td><input type="checkbox" name="bank[]"
+	<td><input type="checkbox" name="key"
 		   id="bank_{{bank.key}}"
 		   value="{{bank.key}}"/></td>
 	<td><label for="bank_{{bank.key}}">{{bank.name}}</label></td>
 	<td><a href="?action=delete&key={{bank.key}}">delete</a></td>
       </tr>
 {% endfor %}
+{% else %}
+      <tr><td colspan="3" style="text-align:center">
+	  No bank in the database.
+      </td></tr>
+{% endif %}
     </table>
 </form>
 
