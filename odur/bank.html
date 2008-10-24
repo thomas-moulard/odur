@@ -52,8 +52,8 @@ function setAllCheckBoxes(FormName, FieldName, CheckValue)
 	<th>Bank name</th>
 	<th style="width:1%">Action</th>
       </tr>
-{% if banks %}
-{% for bank in banks %}
+{% if items %}
+{% for bank in items %}
       <tr class="{% cycle rowEven,rowOdd %}">
 	<td><input type="checkbox" name="key"
 		   id="bank_{{bank.key}}"

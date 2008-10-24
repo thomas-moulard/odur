@@ -11,7 +11,7 @@
 	<th style="width:10%">Owner</th>
 	<th style="width:1%">Action</th>
       </tr>
-{% for category in payeeCategories %}
+{% for category in items %}
       <tr class="{% cycle rowEven,rowOdd %}">
 	<td><input type="checkbox" name="category[]"
 		   id="category_{{category.key}}"
@@ -20,7 +20,7 @@
 	  <label for="category_{{category.key}}">{{category.name}}</label>
 	</td>
 	<td>
-{% if category.owner %}{{category.owner}}{% else %}Global{% endif %}
+{% if category.owner %}{{category.owner}}{% else %}Shared{% endif %}
 </td>
 	<td><a href="?action=delete&key={{category.key}}">delete</a></td>
       </tr>

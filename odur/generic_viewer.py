@@ -104,7 +104,7 @@ class GenericViewer(webapp.RequestHandler):
             'order': self.order,
             'total': total,
             'max_item': min(self.offset + self.limit, total),
-            lmodel+'s': items,
+            'items': items,
             }
         addCommonTemplateValues(template_values, self)
 
