@@ -54,9 +54,44 @@ class PayeeCategoryPage(GenericViewer):
 
   def initializeData(self):
     data=[
-      PayeeCategory(name='Expense/Culture'),
-      PayeeCategory(name='Expense/Food'),
-      PayeeCategory(name='Expense/Transportation'),
+      PayeeCategory(name='Expense/Bill\Subscription/Household insurance'),
+      PayeeCategory(name='Expense/Bill\Subscription/Service charges'),
+      PayeeCategory(name='Expense/Bill\Subscription/Heating'),
+      PayeeCategory(name='Expense/Bill\Subscription/Water'),
+      PayeeCategory(name='Expense/Bill\Subscription/Electricity'),
+      PayeeCategory(name='Expense/Bill\Subscription/Internet'),
+      PayeeCategory(name='Expense/Bill\Subscription/Rent'),
+      PayeeCategory(name='Expense/Bill\Subscription/Domestic cleaning'),
+      PayeeCategory(name='Expense/Bill\Subscription/Cell phone'),
+      PayeeCategory(name='Expense/Bill\Subscription/Water'),
+      PayeeCategory(name='Expense/Bill\Subscription/Consumer credit'),
+      PayeeCategory(name='Expense/Bill\Subscription/Real estate credit'),
+      PayeeCategory(name='Expense/Bill\Subscription/Care taking service'),
+      PayeeCategory(name='Expense/Bill\Subscription/Domestic employee'),
+      PayeeCategory(name='Expense/Bill\Subscription/Phone'),
+      PayeeCategory(name='Expense/Bill\Subscription/TV\Cable'),
+
+      PayeeCategory(name='Food/Coffee house\Bar'),
+      PayeeCategory(name='Food/Grocery'),
+      PayeeCategory(name='Domestic animal/Food'),
+      PayeeCategory(name='Domestic animal/Misc costs'),
+      PayeeCategory(name='Domestic animal/Carer'),
+      PayeeCategory(name='Domestic animal/Veterinary'),
+
+      PayeeCategory(name='Car\Bike/Accessories'),
+      PayeeCategory(name='Car\Bike/Insurance'),
+      PayeeCategory(name='Car\Bike/Reparation'),
+      PayeeCategory(name='Car\Bike/Gas'),
+      PayeeCategory(name='Car\Bike/Parking\Toll'),
+      PayeeCategory(name='Car\Bike/Credit'),
+
+      PayeeCategory(name='Misc/Gift'),
+      PayeeCategory(name='Misc/Donation'),
+      #Responsabilité civile
+      PayeeCategory(name='Misc/Cash withdrawal'),
+
+      PayeeCategory(name='Kids/Cultural\Sport activity'),
+
       PayeeCategory(name='Takings/Salary'),
       ]
     return GenericViewer.initializeData(self, data)

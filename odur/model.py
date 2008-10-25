@@ -31,12 +31,22 @@ class DecimalProperty(db.Property):
 class Bank(db.Model):
   name = db.StringProperty(required=True)
 
+  bankCode = db.IntegerProperty(required=False, default=0)
+  bicBankCode = db.StringProperty(required=False, default='')
+  #FIXME: + Gmail contact.
+
 class Account(db.Model):
   name = db.StringProperty(required=True)
   bank = db.ReferenceProperty(Bank, required=True)
   dateCreation = db.DateTimeProperty(auto_now_add=True)
   dateUpdate = db.DateTimeProperty(auto_now=True)
   owner = db.UserProperty(required=True)
+
+  initialBalance = DecimalProperty(required=False, default=0)
+  balance = DecimalProperty(required=False, default=0)
+
+  iban = db.StringProperty(required=False, default='')
+  bic = db.StringProperty(required=False, default='')
 
 class PayeeCategory(db.Model):
   name = db.StringProperty(required=True)
@@ -45,6 +55,7 @@ class PayeeCategory(db.Model):
 class Payee(db.Model):
   name = db.StringProperty(required=True)
   owner = db.UserProperty()
+  #FIXME: + Gmail contact.
 
 class Operation(db.Model):
   number = db.StringProperty()
