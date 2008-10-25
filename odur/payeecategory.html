@@ -1,47 +1,43 @@
-{% extends "../base.html" %}
+{% extends "genericviewer.html" %}
 
 {% block title %}View payee categories{% endblock %}
 
-{% block content %}
-    <table id="payeeCategoryList">
-      <caption>Category list</caption>
-      <tr>
-	<th style="width:1%">&nbsp;</th>
-	<th>Payee category name</th>
-	<th style="width:10%">Owner</th>
-	<th style="width:1%">Action</th>
-      </tr>
-{% for category in items %}
-      <tr class="{% cycle rowEven,rowOdd %}">
-	<td><input type="checkbox" name="category[]"
-		   id="category_{{category.key}}"
-		   value="{{category.key}}"/></td>
-	<td>
-	  <label for="category_{{category.key}}">{{category.name}}</label>
-	</td>
-	<td>
-{% if category.owner %}{{category.owner}}{% else %}Shared{% endif %}
-</td>
-	<td><a href="?action=delete&key={{category.key}}">delete</a></td>
-      </tr>
-{% endfor %}
-    </table>
+{% block table_headers_n %}4{% endblock %}
+{% block table_header %}
+<th>Payee category name</th>
+<th style="width:10%">Owner</th>
+{% endblock %}
 
-    <form action="" method="post" name="addPayeeCategory">
-      <div>
-	<label for="name">Category name</label>
-	<input type="text" id="name" name="name"></input>
-      </div>
-      <div>
-	<label for="owner">Owner</label>
-	<input type="radio" id="owner_global" name="owner" value=""/>
-	<label for="owner_global" class="radio">Global</label>
-	<input type="radio" id="owner_me" name="owner"
-	       checked="checked"
-	       value="{{currentUser}}"/>
-	<label for="owner_me" class="radio">Only me</label>
-      </div>
-      <div><input type="submit" value="Add category"></div>
-      <input type="hidden" name="action" value="add"/>
-    </form>
+{% block row %}
+<td>
+  <label for="item_{{item.key}}">{{item.name}}</label>
+</td>
+<td>
+  {% if item.owner %}{{item.owner}}{% else %}Shared{% endif %}
+</td>
+{% endblock %}
+
+{% block gv_header %}
+<h1 class="page_title">Payee categories list</h1>
+{% endblock %}
+
+{% block gv_footer %}
+<h2>Add a category</h2>
+<form action="" method="post" name="addPayeeCategory">
+  <div>
+    <label for="name">Category name</label>
+    <input type="text" id="name" name="name"></input>
+  </div>
+  <div>
+    <label for="owner">Owner</label>
+    <input type="radio" id="owner_global" name="owner" value=""/>
+    <label for="owner_global" class="radio">Global</label>
+    <input type="radio" id="owner_me" name="owner"
+	   checked="checked"
+	   value="{{currentUser}}"/>
+    <label for="owner_me" class="radio">Only me</label>
+  </div>
+  <div><input type="submit" value="Add category"></div>
+  <input type="hidden" name="action" value="add"/>
+</form>
 {% endblock %}

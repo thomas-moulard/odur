@@ -1,0 +1,7 @@
+{% if prev_url %}
+<a href="{{prev_url}}">&lsaquo; Previous</a>
+{% endif %}
+{{offset|add:1}} - {{max_item}} of {{total}}
+{% if next_url %}
+<a href="{{next_url}}">&rsaquo; Next</a>
+{% endif %}

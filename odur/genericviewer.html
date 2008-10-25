@@ -1,0 +1,67 @@
+{% extends "../base.html" %}
+
+{% block content %}
+<script type="text/javascript">
+function setAllCheckBoxes(FormName, FieldName, CheckValue)
+{
+  if(!document.forms[FormName])
+    return;
+  var objCheckBoxes = document.forms[FormName].elements[FieldName];
+  if(!objCheckBoxes)
+    return;
+  var countCheckBoxes = objCheckBoxes.length;
+  if(!countCheckBoxes)
+    objCheckBoxes.checked = CheckValue;
+  else
+    for(var i = 0; i < countCheckBoxes; i++)
+      objCheckBoxes[i].checked = CheckValue;
+}
+</script>
+
+{% block gv_header %}{% endblock %}
+
+<form action="" method="post" name="mass_modification">
+  <input type="hidden" name="action" value="mass_modification"/>
+
+    <table id="list">
+      <tr>
+	<th colspan="{% block table_headers_n %}{% endblock %}">
+<div style="text-align:left; float: left">
+  <input type="submit" name="delete" value="delete" />
+  <br/>
+  <div style="margin:0.1em">Select:
+    <a href="javascript:setAllCheckBoxes('mass_modification','key', '1')">All</a>,
+    <a href="javascript:setAllCheckBoxes('mass_modification','key', '')">None</a>
+  </div>
+</div>
+
+<div style="text-align:right; float: right">
+{% include "pager.html" %}
+</div>
+	</th>
+      </tr>
+      <tr>
+	<th style="width:1%">&nbsp;</th>
+{% block table_header %}{% endblock %}
+	<th style="width:1%">Action</th>
+      </tr>
+{% if items %}
+{% for item in items %}
+      <tr class="{% cycle rowEven,rowOdd %}">
+	<td><input type="checkbox" name="key"
+		   id="item_{{item.key}}"
+		   value="{{item.key}}"/></td>
+{% block row %}{% endblock %}
+	<td><a href="?action=delete&key={{item.key}}">delete</a></td>
+      </tr>
+{% endfor %}
+{% else %}
+      <tr><td colspan="3" style="text-align:center">
+	  No item in the database.
+      </td></tr>
+{% endif %}
+    </table>
+</form>
+
+{% block gv_footer %}{% endblock %}
+{% endblock %}

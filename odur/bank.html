@@ -1,81 +1,26 @@
-{% extends "../base.html" %}
+{% extends "genericviewer.html" %}
 
 {% block title %}View banks{% endblock %}
 
-{% block content %}
-<script type="text/javascript">
-function setAllCheckBoxes(FormName, FieldName, CheckValue)
-{
-  if(!document.forms[FormName])
-    return;
-  var objCheckBoxes = document.forms[FormName].elements[FieldName];
-  if(!objCheckBoxes)
-    return;
-  var countCheckBoxes = objCheckBoxes.length;
-  if(!countCheckBoxes)
-    objCheckBoxes.checked = CheckValue;
-  else
-    for(var i = 0; i < countCheckBoxes; i++)
-      objCheckBoxes[i].checked = CheckValue;
-}
-</script>
+{% block table_headers_n %}3{% endblock %}
+{% block table_header %}
+<th>Name</th>
+{% endblock %}
 
-<form action="" method="post" name="mass_modification">
-  <input type="hidden" name="action" value="mass_modification"/>
+{% block row %}
+<td>{{item.name}}</td>
+{% endblock %}
 
-    <table id="bankList">
-      <caption>Bank list</caption>
-      <tr>
-	<th colspan="3">
-<div style="text-align:left; float: left">
-  <input type="submit" name="delete" value="delete" />
-  <br/>
-  <div style="margin:0.1em">Select:
-    <a href="javascript:setAllCheckBoxes('mass_modification','key', '1')">All</a>,
-    <a href="javascript:setAllCheckBoxes('mass_modification','key', '')">None</a>
+{% block gv_header %}<h1 class="page_title">Bank list</h1>{% endblock %}
+
+{% block gv_footer %}
+<h2>Add a bank</h2>
+<form action="" method="post" name="addBank">
+  <div>
+    <label for="name">Bank name</label>
+    <input type="text" id="name" name="name"></input>
   </div>
-</div>
-
-<div style="text-align:right; float: right">
-  {% if prev_url %}
-  <a href="{{prev_url}}">&lsaquo; Previous</a>
-  {% endif %}
-  {{offset|add:1}} - {{max_item}} of {{total}}
-  {% if next_url %}
-  <a href="{{next_url}}">&rsaquo; Next</a>
-  {% endif %}
-</div>
-	</th>
-      </tr>
-      <tr>
-	<th style="width:1%">&nbsp;</th>
-	<th>Bank name</th>
-	<th style="width:1%">Action</th>
-      </tr>
-{% if items %}
-{% for bank in items %}
-      <tr class="{% cycle rowEven,rowOdd %}">
-	<td><input type="checkbox" name="key"
-		   id="bank_{{bank.key}}"
-		   value="{{bank.key}}"/></td>
-	<td><label for="bank_{{bank.key}}">{{bank.name}}</label></td>
-	<td><a href="?action=delete&key={{bank.key}}">delete</a></td>
-      </tr>
-{% endfor %}
-{% else %}
-      <tr><td colspan="3" style="text-align:center">
-	  No bank in the database.
-      </td></tr>
-{% endif %}
-    </table>
+  <div><input type="submit" value="Add bank"></div>
+  <input type="hidden" name="action" value="add"/>
 </form>
-
-    <form action="" method="post" name="addBank">
-      <div>
-	<label for="name">Bank name</label>
-	<input type="text" id="name" name="name"></input>
-      </div>
-      <div><input type="submit" value="Add bank"></div>
-      <input type="hidden" name="action" value="add"/>
-    </form>
 {% endblock %}
