@@ -82,6 +82,9 @@ class GenericViewer(webapp.RequestHandler):
             self.delete()
         return True
 
+    def customizeView(self):
+        pass
+
     def view(self):
         lmodel = self.model.__name__.lower()
 

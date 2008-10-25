@@ -60,26 +60,51 @@ class AccountPage(GenericViewer):
 
 #TODO: use generic view.
   def view(self):
-    if users.get_current_user() == None:
-      accounts = None
-    else:
-      accounts_query = Account.all()
-      accounts_query.filter('owner =', users.get_current_user()).order('name')
-      accounts = accounts_query.fetch(10)
+    lmodel = self.model.__name__.lower()
 
-      for ac in accounts:
-        ac.amount = self.getTotalAmount(ac)
-        ac.amountPositive = ac.amount > 0
+    if self.request.get('order'):
+      self.order = self.request.get('order')
+    if self.request.get('limit'):
+      self.limit = int(self.request.get('limit'))
+    if self.request.get('offset'):
+      self.offset = int(self.request.get('offset'))
 
-    banks_query = Bank.all().order('name')
-    banks = banks_query.fetch(10)
+    items_query = self.model.all()
+    items_query.filter('owner =', users.get_current_user()).order('name')
+    total = items_query.count()
+    if self.order is not None:
+      items_query.order(self.order)
+    items = items_query.fetch(self.limit, self.offset)
+    for ac in items:
+      ac.amount = self.getTotalAmount(ac)
+      ac.amountPositive = ac.amount > 0
 
+    banks = Bank.all().order('name')
 
     template_values = {
       'banks': banks,
+      'limit': self.limit,
+      'offset': self.offset,
+      'order': self.order,
+      'total': total,
+      'max_item': min(self.offset + self.limit, total),
+      'items': items,
       }
     addCommonTemplateValues(template_values, self)
-    template_values['accounts'] = accounts
 
-    path = os.path.join(os.path.dirname(__file__), 'account.html')
+    if self.offset > 0:
+      prev = self.offset - self.limit
+      if prev < 0:
+        prev = 0
+        template_values['prev_url'] = (
+          self.url + '?offset=%s' % prev)
+
+    if self.offset + self.limit < total:
+      next = self.offset + self.limit
+      template_values['next_url'] = (
+        self.url + '?offset=%s' % next)
+
+    path = os.path.join(os.path.dirname(__file__),
+                        '%s.html' % lmodel)
     self.response.out.write(template.render(path, template_values))
+    return True

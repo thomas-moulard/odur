@@ -1,56 +1,46 @@
-{% extends "../base.html" %}
+{% extends "genericviewer.html" %}
 
 {% block title %}View accounts{% endblock %}
 
-{% block content %}
-    <table id="accountList">
-      <caption>Bank account list</caption>
-      <tr>
-	<th style="width:1%">&nbsp;</th>
-	<th>Name</th>
-	<th>Bank name</th>
-	<th>Creation date</th>
-	<th>Last update</th>
-	<th>Owner</th>
-	<th>Amount</th>
-	<th style="width:1%">Action</th>
-      </tr>
-{% for account in accounts %}
-      <tr class="{% cycle rowEven,rowOdd %}">
-	<td><input type="checkbox" name="account[]"
-		   id="account_{{account.key}}"
-		   value="{{account.key}}"/></td>
-	<td>
-	  <a href="/operation?account={{account.key}}">{{account.name}}</a>
-	</td>
-	<td>{{account.bank.name}}</td>
-	<td>{{account.dateCreation|date:"Y l F jS"}}</td>
-	<td>{{account.dateOwner|date:"Y l F jS"}}</td>
-	<td>{{account.owner}}</td>
-	<td class="{% firstof account.amountPositive "red" %}">
-	{{account.amount}}</td>
-	<td>
-	  <a href="?action=delete&key={{account.key}}">delete</a>
-	</td>
-      </tr>
-{% endfor %}
-    </table>
+{% block table_headers_n %}8{% endblock %}
+{% block table_header %}
+<th>Name</th>
+<th>Bank name</th>
+<th>Creation date</th>
+<th>Last update</th>
+<th>Owner</th>
+<th>Amount</th>
+{% endblock %}
 
-    <form action="" method="post" name="addAccount">
-      <div>
-	<label for="account">Account name</label>
-	<input type="text" id="account" name="account"></input>
-      </div>
-      <div>
-	<label for="bank">Bank name</label>
-	<select name="bank" id="bank">
-{% for bank in banks %}
-		<option id="bank_{{bank.key}}"
-			value="{{bank.key}}">{{bank.name}}</option>
-{% endfor %}
-        </select>
-      </div>
-      <div><input type="submit" value="Add account"></div>
-      <input type="hidden" name="action" value="add"/>
-    </form>
+{% block row %}
+<td><a href="/operation?account={{item.key}}">{{item.name}}</a></td>
+<td>{{item.bank.name}}</td>
+<td>{{item.dateCreation|date:"Y l F jS"}}</td>
+<td>{{item.dateOwner|date:"Y l F jS"}}</td>
+<td>{{item.owner}}</td>
+<td class="{% firstof item.amountPositive "red" %}">{{item.amount}}</td>
+{% endblock %}
+
+{% block gv_header %}<h1 class="page_title">Account list</h1>{% endblock %}
+
+{% block gv_footer %}
+<h2>Add an account</h2>
+
+<form action="" method="post" name="addAccount">
+  <div>
+    <label for="account">Account name</label>
+    <input type="text" id="account" name="account"></input>
+  </div>
+  <div>
+    <label for="bank">Bank name</label>
+    <select name="bank" id="bank">
+      {% for bank in banks %}
+      <option id="bank_{{bank.key}}"
+	      value="{{bank.key}}">{{bank.name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div><input type="submit" value="Add account"></div>
+  <input type="hidden" name="action" value="add"/>
+</form>
 {% endblock %}
