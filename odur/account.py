@@ -10,9 +10,19 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 from odur.common import addCommonTemplateValues
+from odur.generic_viewer import GenericViewer
 from odur.model import Account, Bank, Operation
 
-class AccountPage(webapp.RequestHandler):
+class AccountPage(GenericViewer):
+  def __init__(self):
+    GenericViewer.__init__(self, Account, '/account')
+
+  def checkPermissions(self, action):
+    if not users.get_current_user():
+      self.redirect(users.create_login_url(self.url))
+      return False
+    return True
+
   def getTotalAmount(self,account):
     currentAmount = 0
     operations_query = Operation.all()
@@ -23,38 +33,33 @@ class AccountPage(webapp.RequestHandler):
     return currentAmount
 
   def add(self):
-    if users.get_current_user() == None:
-      return
+    if GenericViewer.add(self):
+      return False
     account = Account(
       name = self.request.get('account'),
       bank = db.get(self.request.get('bank')),
       owner = users.get_current_user(),
       )
     account.put()
+    self.messages.append('Bank successfully added.')
+    self.redirect()
+    return True
 
   def delete(self):
-    if users.get_current_user() == None:
-      return
-    if self.request.get('key') == None:
-      return
     account = db.get(self.request.get('key'))
-    if account.owner == users.get_current_user():
-      account.delete()
+    if (account.owner != users.get_current_user()
+        and users.is_current_user_admin()):
+      self.messages.append(
+        'Error: insufficient permissions to delete this account.')
+      self.redirect()
+      return False
+    if not GenericViewer.delete(self):
+      return False
+#TODO: delete bank's operation.
+    return True
 
-  def handleActions(self):
-    if users.get_current_user() == None:
-      self.redirect(users.create_login_url('/account'))
-
-    if self.request.get('action') == 'delete':
-      self.delete()
-      self.redirect('/account')
-    if self.request.get('action') == 'add':
-      self.add()
-      self.redirect('/account')
-
-  def get(self):
-    self.handleActions()
-
+#TODO: use generic view.
+  def view(self):
     if users.get_current_user() == None:
       accounts = None
     else:
@@ -78,6 +83,3 @@ class AccountPage(webapp.RequestHandler):
 
     path = os.path.join(os.path.dirname(__file__), 'account.html')
     self.response.out.write(template.render(path, template_values))
-
-  def post(self):
-    self.handleActions()
