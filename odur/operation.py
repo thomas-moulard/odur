@@ -11,13 +11,23 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 from odur.common import addCommonTemplateValues, ref_exists
+from odur.generic_viewer import GenericViewer
 from odur.model import Account, Bank, Operation, PayeeCategory
 
 
-class OperationPage(webapp.RequestHandler):
+class OperationPage(GenericViewer):
+  def __init__(self):
+    GenericViewer.__init__(self, Operation, '/operation')
+
+  def checkPermissions(self, action):
+    if not users.get_current_user():
+      self.redirect(users.create_login_url(self.url))
+      return False
+    return True
+
   def add(self):
-    if users.get_current_user() == None:
-      return
+    if GenericViewer.add(self):
+      return False
     operation = Operation(
       number = self.request.get('number'),
       date = datetime.strptime(self.request.get('date'),'%m/%d/%Y'),
@@ -28,17 +38,26 @@ class OperationPage(webapp.RequestHandler):
       amount = self.request.get('amount')
       )
     operation.put()
+    self.messages.append('Operation ``%s'' successfully added.'
+                         % operation.description)
+    self.redirect('/operation?account=' + self.request.get('account'))
+    return True
 
   def delete(self):
-    if users.get_current_user() == None:
-      return
-    if self.request.get('key') == None:
-      return
-    operation = db.get(self.request.get('key'))
-    if not operation or not operation.account.owner:
-      return
-    if operation.account.owner == users.get_current_user():
-      operation.delete()
+    item = db.get(self.request.get('key'))
+    if not item or not item.account.owner:
+      self.messages.append('Error: invalid operation.')
+      self.redirect('/operation?account=' + self.request.get('account'))
+      return False
+    if (item.account.owner != users.get_current_user()
+        and users.is_current_user_admin()):
+      self.messages.append(
+        'Error: insufficient permissions to delete this account.')
+      self.redirect('/operation?account=' + self.request.get('account'))
+      return False
+    res = GenericViewer.delete(self)
+    self.redirect('/operation?account=' + self.request.get('account'))
+    return res
 
   def categoryChart(self, account, showExpense=True, title=None, id=None):
     if account is None:
@@ -61,10 +80,16 @@ class OperationPage(webapp.RequestHandler):
     for op in operations_query:
       if showExpense:
         if op.amount < 0:
-          values[op.categories] = -op.amount
+          if values.has_key(op.categories):
+            values[op.categories.name] += -op.amount
+          else:
+            values[op.categories.name] = -op.amount
       else:
         if op.amount > 0:
-          values[op.categories] = op.amount
+          if values.has_key(op.categories):
+            values[op.categories.name] += op.amount
+          else:
+            values[op.categories.name] = op.amount
 
     str = """
     <script type=\"text/javascript\">
@@ -78,7 +103,7 @@ class OperationPage(webapp.RequestHandler):
 
     i = 0
     for k,v in values.iteritems():
-      str += "data.setValue(%i, 0,'%s');\n" % (i,k.name)
+      str += "data.setValue(%i, 0,'%s');\n" % (i,k)
       str += "data.setValue(%i, 1,%s);\n" % (i,v)
       i += 1
 
@@ -92,25 +117,8 @@ class OperationPage(webapp.RequestHandler):
 
     return str
 
-
-  def handleActions(self):
-    if users.get_current_user() == None:
-      self.redirect(users.create_login_url('/account'))
-
-    if self.request.get('action') == 'delete':
-      self.delete()
-      self.redirect('/operation?account=' + self.request.get('account'))
-    if self.request.get('action') == 'add':
-      self.add()
-      self.redirect('/operation?account=' + self.request.get('account'))
-
-  def get(self):
-    self.handleActions()
-
+  def view(self):
     if not self.request.get('account'):
-      self.redirect('/')
-      return
-    if users.get_current_user() == None:
       self.redirect('/')
       return
 
@@ -167,6 +175,3 @@ class OperationPage(webapp.RequestHandler):
     addCommonTemplateValues(template_values, self)
     path = os.path.join(os.path.dirname(__file__), 'operation.html')
     self.response.out.write(template.render(path, template_values))
-
-  def post(self):
-    self.handleActions()

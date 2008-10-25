@@ -41,7 +41,7 @@ class AccountPage(GenericViewer):
       owner = users.get_current_user(),
       )
     account.put()
-    self.messages.append('Bank successfully added.')
+    self.messages.append('Account successfully added.')
     self.redirect()
     return True
 

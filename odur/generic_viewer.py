@@ -165,5 +165,9 @@ class GenericViewer(webapp.RequestHandler):
         if not isinstance(extraArgs, dict):
             extraArgs = {}
         extraArgs['messages[]'] =  self.messages
-        uri += '?' + urlencode(extraArgs, True)
+        if uri.find('?') == -1:
+            uri += '?'
+        else:
+            uri += '&'
+        uri += urlencode(extraArgs, True)
         return webapp.RequestHandler.redirect(self, uri, permanent)

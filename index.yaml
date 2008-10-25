@@ -10,13 +10,13 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 254 times in query history.
+# Used 310 times in query history.
 - kind: Account
   properties:
   - name: owner
   - name: name
 
-# Used 41 times in query history.
+# Used 55 times in query history.
 - kind: Operation
   properties:
   - name: account
