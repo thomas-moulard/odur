@@ -71,26 +71,26 @@ class PayeeCategoryPage(GenericViewer):
       PayeeCategory(name='Expense/Bill\Subscription/Phone'),
       PayeeCategory(name='Expense/Bill\Subscription/TV\Cable'),
 
-      PayeeCategory(name='Food/Coffee house\Bar'),
-      PayeeCategory(name='Food/Grocery'),
-      PayeeCategory(name='Domestic animal/Food'),
-      PayeeCategory(name='Domestic animal/Misc costs'),
-      PayeeCategory(name='Domestic animal/Carer'),
-      PayeeCategory(name='Domestic animal/Veterinary'),
+      PayeeCategory(name='Expense/Food/Coffee house\Bar'),
+      PayeeCategory(name='Expense/Food/Grocery'),
+      PayeeCategory(name='Expense/Domestic animal/Food'),
+      PayeeCategory(name='Expense/Domestic animal/Misc costs'),
+      PayeeCategory(name='Expense/Domestic animal/Carer'),
+      PayeeCategory(name='Expense/Domestic animal/Veterinary'),
 
-      PayeeCategory(name='Car\Bike/Accessories'),
-      PayeeCategory(name='Car\Bike/Insurance'),
-      PayeeCategory(name='Car\Bike/Reparation'),
-      PayeeCategory(name='Car\Bike/Gas'),
-      PayeeCategory(name='Car\Bike/Parking\Toll'),
-      PayeeCategory(name='Car\Bike/Credit'),
+      PayeeCategory(name='Expense/Car\Bike/Accessories'),
+      PayeeCategory(name='Expense/Car\Bike/Insurance'),
+      PayeeCategory(name='Expense/Car\Bike/Reparation'),
+      PayeeCategory(name='Expense/Car\Bike/Gas'),
+      PayeeCategory(name='Expense/Car\Bike/Parking\Toll'),
+      PayeeCategory(name='Expense/Car\Bike/Credit'),
 
-      PayeeCategory(name='Misc/Gift'),
-      PayeeCategory(name='Misc/Donation'),
+      PayeeCategory(name='Expense/Misc/Gift'),
+      PayeeCategory(name='Expense/Misc/Donation'),
       #Responsabilité civile
-      PayeeCategory(name='Misc/Cash withdrawal'),
+      PayeeCategory(name='Expense/Misc/Cash withdrawal'),
 
-      PayeeCategory(name='Kids/Cultural\Sport activity'),
+      PayeeCategory(name='Expense/Kids/Cultural\Sport activity'),
 
       PayeeCategory(name='Takings/Salary'),
       ]
