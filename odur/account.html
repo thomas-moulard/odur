@@ -18,7 +18,7 @@
 <td>{{item.dateCreation|date:"Y l F jS"}}</td>
 <td>{{item.dateOwner|date:"Y l F jS"}}</td>
 <td>{{item.owner}}</td>
-<td class="{% firstof item.amountPositive "red" %}">{{item.amount}}</td>
+<td class="{% firstof item.amountPositive "red" %}">{{item.amount}} {{item.currency}}</td>
 {% endblock %}
 
 {% block gv_header %}<h1 class="page_title">Account list</h1>{% endblock %}
@@ -37,6 +37,15 @@
       {% for bank in banks %}
       <option id="bank_{{bank.key}}"
 	      value="{{bank.key}}">{{bank.name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label for="currency">Currency</label>
+    <select name="currency" id="currency">
+      {% for currency in iso_4217 %}
+      <option id="currency_{{currency}}"
+	      value="{{currency}}">{{currency}}</option>
       {% endfor %}
     </select>
   </div>

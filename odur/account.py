@@ -13,6 +13,8 @@ from odur.common import addCommonTemplateValues
 from odur.generic_viewer import GenericViewer
 from odur.model import Account, Bank, Operation
 
+from odur.utils.iso_4217 import ISO_4217
+
 class AccountPage(GenericViewer):
   def __init__(self):
     GenericViewer.__init__(self, Account, '/account')
@@ -39,6 +41,7 @@ class AccountPage(GenericViewer):
       name = self.request.get('account'),
       bank = db.get(self.request.get('bank')),
       owner = users.get_current_user(),
+      currency = self.request.get('currency'),
       )
     account.put()
     self.messages.append('Account successfully added.')
@@ -89,6 +92,7 @@ class AccountPage(GenericViewer):
       'total': total,
       'max_item': min(self.offset + self.limit, total),
       'items': items,
+      'iso_4217': ISO_4217,
       }
     addCommonTemplateValues(template_values, self)
 

@@ -42,6 +42,8 @@ class Account(db.Model):
   dateUpdate = db.DateTimeProperty(auto_now=True)
   owner = db.UserProperty(required=True)
 
+  currency = db.StringProperty(required=False, default='')
+
   initialBalance = DecimalProperty(required=False, default=0)
   balance = DecimalProperty(required=False, default=0)
 

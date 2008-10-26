@@ -161,7 +161,7 @@ class OperationPage(GenericViewer):
       categories.append(category)
 
     template_values = {
-      'currency': '&euro;', #FIXME
+      'currency': account.currency,
       'operations': operations,
       'currentAccount': account,
       'amountPositive': currentAmount >= 0,

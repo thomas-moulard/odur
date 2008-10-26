@@ -13,7 +13,6 @@ from odur.bank import BankPage
 from odur.operation import OperationPage
 from odur.payee_category import PayeeCategoryPage
 
-
 class MainPage(webapp.RequestHandler):
   def get(self):
     template_values = {}
