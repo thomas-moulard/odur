@@ -2,13 +2,19 @@
 
 {% block title %}View banks{% endblock %}
 
-{% block table_headers_n %}3{% endblock %}
+{% block table_headers_n %}6{% endblock %}
 {% block table_header %}
 <th>Name</th>
+<th>IBAN bank code</th>
+<th>BIC bank code</th>
+<th>Country</th>
 {% endblock %}
 
 {% block row %}
 <td>{{item.name}}</td>
+<td>{{item.bankCode}}</td>
+<td>{{item.bicBankCode}}</td>
+<td>{{item.country}}</td>
 {% endblock %}
 
 {% block gv_header %}<h1 class="page_title">Bank list</h1>{% endblock %}

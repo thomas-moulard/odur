@@ -31,6 +31,9 @@ class BankPage(GenericViewer):
       return False
     bank = Bank(
       name = self.request.get('name'),
+      country = self.request.get('country'),
+      bankCode = self.request.get('bankCode'),
+      bicBankCode = self.request.get('bicBankCode'),
       )
     bank.put()
     self.messages.append('Bank successfully added.')
@@ -45,22 +48,22 @@ class BankPage(GenericViewer):
 
   def initializeData(self):
     data=[
-      Bank(name='BNP Paribas'),
-      Bank(name='Banque de Bretagne'),
-      Bank(name=u'Crédit agricole SA'),
-      Bank(name='LCL'),
-      Bank(name=u'Société générale'),
-      Bank(name='Boursorama'),
-      Bank(name=u'Crédit du Nord'),
-      Bank(name=u'Caisse d\'épargne'),
-      Bank(name=u'Groupe Banque populaire'),
-      Bank(name=u'BRED'),
-      Bank(name=u'Crédit Coopératif'),
-      Bank(name=u'CASDEN,'),
-      Bank(name=u'Crédit Maritime'),
-      Bank(name=u'Natixis'),
-      Bank(name=u'Crédit mutuel'),
-      Bank(name=u'Crédit industriel et commercial (CIC)'),
-
+      Bank(name='BNP Paribas', country='FR', bankCode=30004),
+      Bank(name='Banque de Bretagne', country='FR', bankCode=40168),
+      Bank(name=u'Crédit agricole SA', country='FR', bankCode=39996),
+      Bank(name='LCL', country='FR', bankCode=30048),
+      Bank(name=u'Société générale', country='FR', bankCode=30003),
+      Bank(name='Boursorama', country='FR', bankCode=21360),
+      Bank(name=u'Crédit du Nord', country='FR', bankCode=30076),
+      Bank(name=u'Caisse d\'épargne', country='FR', bankCode=14768),
+      Bank(name=u'Groupe Banque populaire', country='FR', bankCode=30007),
+      Bank(name=u'BRED', country='FR', bankCode=40398),
+      Bank(name=u'Crédit Coopératif', country='FR', bankCode=42559),
+      Bank(name=u'CASDEN', country='FR'),
+      Bank(name=u'Crédit Maritime', country='FR', bankCode=7389),
+      Bank(name=u'Natexis', country='FR', bankCode=10061),
+      Bank(name=u'Crédit mutuel', country='FR', bankCode=11808),
+      Bank(name=u'Crédit industriel et commercial (CIC)', country='FR',
+           bankCode=30066),
       ]
     return GenericViewer.initializeData(self, data)

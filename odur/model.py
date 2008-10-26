@@ -30,7 +30,7 @@ class DecimalProperty(db.Property):
 
 class Bank(db.Model):
   name = db.StringProperty(required=True)
-
+  country = db.StringProperty(required=False, default='')
   bankCode = db.IntegerProperty(required=False, default=0)
   bicBankCode = db.StringProperty(required=False, default='')
   #FIXME: + Gmail contact.
